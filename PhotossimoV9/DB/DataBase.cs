@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Photossimo
+namespace PhotossimoV9.DB
 {
     internal class DataBase
     {
-        private static MySqlConnection connection;
+        private static MySqlConnection? connection;
 
         public static MySqlConnection GetInstance()
         {
@@ -27,7 +27,7 @@ namespace Photossimo
                 catch (NullReferenceException ex)
                 {
                     Console.WriteLine("Erreur : " + ex.Message);
-                    throw ex;
+                    throw new NullReferenceException(ex.Message);
                 }
             }
             return connection;
