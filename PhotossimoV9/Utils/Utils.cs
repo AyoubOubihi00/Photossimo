@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PhotossimoV9.Utils
 {
-    static class Utils
+    class Utils
     {
         // Entrée : Une chaîne de la forme "1, 2, 3, 4" qui provient de la BDD.
         // Sortie : Une liste de int qui réprésente l'id de chaque tags dans la BDD.

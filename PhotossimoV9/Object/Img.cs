@@ -10,92 +10,53 @@ namespace PhotossimoV9.Object
 {
     class Img
     {
-        public int id_image { get; set; }
-        public string chemin_image { get; set; }
-        public DateTime date_import { get; set; }
-        public List<Tag>tags { get; set; }
-
-        //Constructeur par défaut
-        public Img() {
-            tags = new List<Tag>();
+        private string _cheminImage;
+        private List<Tag> _tags;
+        public int IdImage { get; set; }
+        public string CheminImage { 
+            get { return _cheminImage; } 
+            set {
+                if (!string.IsNullOrWhiteSpace(value))
+                    _cheminImage = value;
+                else
+                    throw new ArgumentException("Le chemin de l'image ne peut pas être vide !");
+            }
+        }
+        public DateTime DateImport { get; set; }
+        public List<Tag> Tags
+        {
+            get { return _tags; }
+            set
+            {
+                _tags = value ?? [];
+            }
         }
 
+        public Image? Image { get; set; }
 
-        //Constructeur avec parametres
-        public Img(int idImage,string cheminImage,DateTime dateImport,string Tags)
+        public Img(int idImage, string cheminImage, DateTime dateImport, List<Tag> Tags)
         {
-            id_image = idImage;
-            chemin_image = cheminImage;
-            date_import = dateImport;
-            tags = (tags != null) ? tags : new List<Tag>(); // Si tags est null, on initialise une liste vide
+            IdImage = idImage;
+            CheminImage = cheminImage;
+            DateImport = dateImport;
+            this.Tags = Tags ?? []; // Si Tags est null, on initialise une liste vide
 
-        }
-
-        public int GetID()
-        {
-            return id_image;
-        }
-        public void SetId(int IdImage)
-        {
-            id_image = IdImage;
+            try { 
+                    Image = Image.FromFile(CheminImage);
+            }
+            catch (FileNotFoundException e) {
+                Console.WriteLine(e.Message);
+            }
         }
 
         public string GetNom()
         {
-            if (string.IsNullOrWhiteSpace(chemin_image))
+            if (string.IsNullOrWhiteSpace(CheminImage))
                 return "Nom inconnu";
             
-            int dernierIndex = chemin_image.LastIndexOf('/');
-            return (dernierIndex != -1) ? chemin_image.Substring(dernierIndex + 1) : chemin_image;
+            int dernierIndex = CheminImage.LastIndexOf('/');
+            return (dernierIndex != -1) ? CheminImage.Substring(dernierIndex + 1) : CheminImage;
            
         }
-
-        public string GetChemin()
-        {
-            return chemin_image;
-        }
-        public void SetChemin( string CheminImage)
-        {
-            if(!string.IsNullOrWhiteSpace(CheminImage))
-            {
-                chemin_image = CheminImage;
-            }
-            else
-            {
-                throw new ArgumentException("Le chemin de l'image ne peut pas être vide !");
-            }
-        }
-
-        public DateTime GetDateImport()
-        {
-            return date_import;
-        }
-
-        public void SetDateImport( DateTime date)
-        {
-            date_import = date;
-        }
-
-        public List<Tag> GetTags()
-        {
-            return tags;
-        }
-
-        public void SetTags(List<Tag> Tags)
-        {
-            tags = Tags ?? new List<Tag>(); // Si null, on initialise une liste vide
-        }
-
-        public List<int> GetTagsToListInt()
-        {
-            List<int> ListIdTags = new();
-
-            foreach(Tag t in tags)
-            {
-                ListIdTags.Add(t.GetID());
-            }
-            return ListIdTags;
-        }
-
     }
 }

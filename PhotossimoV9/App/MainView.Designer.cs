@@ -235,7 +235,6 @@
             tableLayoutPanel3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ResumeLayout(false);
-
         }
 
         #endregion

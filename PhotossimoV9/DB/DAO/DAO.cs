@@ -12,5 +12,6 @@ namespace PhotossimoV9.DB.DAO
         public abstract List<T> FindAll();
         public abstract void Create(T obj, MySqlTransaction transaction);
         public abstract void Delete(T obj, MySqlTransaction transaction);
+        public abstract void Update(T obj, MySqlTransaction transaction);
     }
 }
