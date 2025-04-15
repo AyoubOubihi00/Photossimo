@@ -107,5 +107,25 @@ namespace PhotossimoV9.DB.DAO
                 Console.WriteLine("Erreur : " + e.Message);
             }
         }
-    }
+        public void DeleteTagEtEnfants(Tag tag, MySqlTransaction transaction) // Suppression en cascade des enfants 
+        {
+            foreach(Tag enfant in tag.Enfants.ToList())
+            {
+                DeleteTagEtEnfants(enfant, transaction);
+            }
+
+            Delete(tag, transaction);
+        }
+        
+        public void DeleteAncetres(Tag tag, MySqlTransaction transaction) // Suppression des ancetres
+        {
+            Tag parent = tag.Parent;
+
+            while(parent != null)
+            {
+                Delete(parent, transaction);
+                parent = parent.Parent;
+            }
+        }
+
 }
