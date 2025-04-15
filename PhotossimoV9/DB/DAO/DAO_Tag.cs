@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Markup;
 using MySql.Data.MySqlClient;
 using PhotossimoV9.Object;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace PhotossimoV9.DB.DAO
 {
@@ -128,4 +129,29 @@ namespace PhotossimoV9.DB.DAO
             }
         }
 
-}
+        public void UpdateTagEtEnfants(Tag tag, string nouveauNom, MySqlTransaction transaction) //Modification tag + tous ses enfants 
+        {
+            tag.NomTag = nouveauNom;
+            Update(tag, transaction);
+
+            foreach (Tag enfant in tag.Enfants)
+            {
+                UpdateTagEtEnfants(enfant, nouveauNom, transaction); 
+            }
+        }
+
+        public void UpdateTagEtAncetres(Tag tag, string nouveauNom, MySqlTransaction transaction) //Modification tag + tous ses Ancetres
+        {
+            Tag courant = tag;
+
+            while (courant != null)
+            {
+                courant.NomTag = nouveauNom;
+                Update(courant, transaction);
+                courant = courant.Parent;
+            }
+        }
+
+
+
+    }
