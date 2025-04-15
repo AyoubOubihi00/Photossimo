@@ -47,6 +47,8 @@ namespace PhotossimoV9.Object
             catch (FileNotFoundException e) {
                 Console.WriteLine(e.Message);
             }
+
+            AddTagsAncestors();
         }
 
         public string GetNom()
@@ -65,6 +67,21 @@ namespace PhotossimoV9.Object
             foreach (Tag tag in Tags)
                 listTagsInt.Add(tag.IdTag);
             return listTagsInt;
+        }
+
+        public void AddTagsAncestors()
+        {
+            List<Tag> ancestorsToAdd = [];
+            foreach (Tag tag in Tags)
+            {
+                Tag? tempTag = tag.Parent;
+                while(tempTag != null && !Tags.Contains(tempTag) && !ancestorsToAdd.Contains(tempTag))
+                {
+                    ancestorsToAdd.Add(tempTag);
+                    tempTag = tempTag.Parent;
+                }
+            }
+            Tags.AddRange(ancestorsToAdd);
         }
     }
 }

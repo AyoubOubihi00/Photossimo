@@ -81,9 +81,13 @@ namespace PhotossimoV9.DB.DAO
                         if (msdr["tags"] is not string stringTags) throw new ArgumentNullException("tags invalide");
 
                         List<int> intTags = Utils.Utils.ParseNumbers(stringTags);
-                        List<Tag> tagList = Tag.GetTagDictionary().Where(x => intTags.Contains(x.Key)).Select(x => x.Value).ToList(); // On récupére les Tags de l'image dans le dictionnaire de Tag (évite de créer des doublons du même Tag)
+                        // On récupére les Tags de l'image dans le dictionnaire de Tag (évite de créer des doublons du même Tag)
+                        List<Tag> tagList = Tag.GetTagDictionary().Where(x => intTags.Contains(x.Key)).Select(x => x.Value).ToList();
 
                         Img newImg = new(idImage, cheminImage, dateImport, tagList);
+                        // On complète la liste de Tags avec tous les ancêtres des Tags déjà présents
+                        newImg.AddTagsAncestors();
+
                         listImg.Add(newImg);
                     }
             }
