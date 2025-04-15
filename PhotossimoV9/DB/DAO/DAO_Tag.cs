@@ -13,7 +13,29 @@ namespace PhotossimoV9.DB.DAO
     {
         public override void Create(Tag tag, MySqlTransaction transaction)
         {
-            throw new NotImplementedException();
+            MySqlConnection connection = DataBase.GetInstance();
+            MySqlCommand command = connection.CreateCommand();
+            command.Connection = connection;
+            command.Transaction = transaction;
+
+            try
+            {
+                command.CommandText = "INSERT INTO tags(" +
+                    "nom_tag, id_parent)" +
+                    "VALUES(@nom_tag, @id_parent);";
+                command.Parameters.AddWithValue("@nom_tag", tag.IdTag);
+                if (tag.Parent is not null) command.Parameters.AddWithValue("@chemin_image", tag.Parent.IdTag);
+                else throw new ArgumentNullException("Le parent est null lors de la création dans la BDD");
+                command.ExecuteNonQuery();
+
+                //On récupére l'ID du tag créé par la bdd
+                command.CommandText = "SELECT LAST_INSERT_ID();";
+                tag.IdTag = Convert.ToInt32(command.ExecuteScalar());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Erreur : " + e.Message);
+            }
         }
 
         public override void Delete(Tag tag, MySqlTransaction transaction)

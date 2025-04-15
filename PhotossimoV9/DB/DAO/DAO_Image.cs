@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace PhotossimoV9.DB.DAO
 {
@@ -23,13 +22,17 @@ namespace PhotossimoV9.DB.DAO
             try
             {
                 command.CommandText = "INSERT INTO images(" +
-                    "id_image, nom_image, chemin_image, date_import, tags)" +
+                    "nom_image, chemin_image, date_import, tags)" +
                     "VALUES(@nom_image, @chemin_image, @date_import, @tags);";
                 command.Parameters.AddWithValue("@nom_image", img.GetNom());
                 command.Parameters.AddWithValue("@chemin_image", img.CheminImage);
                 command.Parameters.AddWithValue("@date_import", img.DateImport);
-                //command.Parameters.AddWithValue("@tags", Utils.Utils.ParseListToString(img.Tags));
+                command.Parameters.AddWithValue("@tags", Utils.Utils.ParseListToString(img.ListTagToListInt()));
                 command.ExecuteNonQuery();
+
+                //On récupére l'ID de l'image créé par la bdd
+                command.CommandText = "SELECT LAST_INSERT_ID();";
+                img.IdImage = Convert.ToInt32(command.ExecuteScalar());
             }
             catch(Exception e)
             {
@@ -100,10 +103,7 @@ namespace PhotossimoV9.DB.DAO
                 command.CommandText = "UPDATE images SET chemin_image=@chemin_image, date_import=@date_import, tags=@tags WHERE id_image=@id_image";
                 command.Parameters.AddWithValue("@chemin_image", img.CheminImage);
                 command.Parameters.AddWithValue("@date_import", img.DateImport);
-                List<int> listTagsInt = [];
-                foreach(Tag tag in img.Tags)
-                    listTagsInt.Add(tag.IdTag);
-                command.Parameters.AddWithValue("@tags", Utils.Utils.ParseListToString(listTagsInt));
+                command.Parameters.AddWithValue("@tags", Utils.Utils.ParseListToString(img.ListTagToListInt()));
                 command.Parameters.AddWithValue("@id_image", img.IdImage);
                 command.ExecuteNonQuery();
             }

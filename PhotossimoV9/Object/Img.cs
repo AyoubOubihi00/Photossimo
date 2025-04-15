@@ -58,5 +58,13 @@ namespace PhotossimoV9.Object
             return (dernierIndex != -1) ? CheminImage.Substring(dernierIndex + 1) : CheminImage;
            
         }
+
+        public List<int> ListTagToListInt()
+        {
+            List<int> listTagsInt = [];
+            foreach (Tag tag in Tags)
+                listTagsInt.Add(tag.IdTag);
+            return listTagsInt;
+        }
     }
 }
