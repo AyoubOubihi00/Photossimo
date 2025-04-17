@@ -29,8 +29,6 @@
         private void InitializeComponent()
         {
             tableLayoutPanel1 = new TableLayoutPanel();
-            panelHierarchie = new Panel();
-            label1 = new Label();
             tableLayoutPanel2 = new TableLayoutPanel();
             buttonDelete = new Button();
             label3 = new Label();
@@ -41,11 +39,14 @@
             tableLayoutPanel3 = new TableLayoutPanel();
             textBox1 = new TextBox();
             dataGridView1 = new DataGridView();
+            tableLayoutPanel4 = new TableLayoutPanel();
+            tagTreeView = new TreeView();
+            label1 = new Label();
             tableLayoutPanel1.SuspendLayout();
-            panelHierarchie.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             tableLayoutPanel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            tableLayoutPanel4.SuspendLayout();
             SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -53,8 +54,8 @@
             tableLayoutPanel1.ColumnCount = 2;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 80F));
-            tableLayoutPanel1.Controls.Add(panelHierarchie, 0, 0);
             tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 1, 0);
+            tableLayoutPanel1.Controls.Add(tableLayoutPanel4, 0, 0);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -62,28 +63,6 @@
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel1.Size = new Size(800, 450);
             tableLayoutPanel1.TabIndex = 0;
-            // 
-            // panelHierarchie
-            // 
-            panelHierarchie.BackColor = SystemColors.ControlDark;
-            panelHierarchie.Controls.Add(label1);
-            panelHierarchie.Dock = DockStyle.Fill;
-            panelHierarchie.Location = new Point(0, 0);
-            panelHierarchie.Margin = new Padding(0);
-            panelHierarchie.Name = "panelHierarchie";
-            panelHierarchie.Size = new Size(160, 450);
-            panelHierarchie.TabIndex = 0;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Font = new Font("Segoe UI", 16.2F);
-            label1.Location = new Point(8, 9);
-            label1.Name = "label1";
-            label1.Size = new Size(144, 38);
-            label1.TabIndex = 0;
-            label1.Text = "Hiérarchie";
-            label1.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // tableLayoutPanel2
             // 
@@ -218,6 +197,40 @@
             dataGridView1.Size = new Size(614, 227);
             dataGridView1.TabIndex = 9;
             // 
+            // tableLayoutPanel4
+            // 
+            tableLayoutPanel4.ColumnCount = 1;
+            tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel4.Controls.Add(tagTreeView, 0, 1);
+            tableLayoutPanel4.Controls.Add(label1, 0, 0);
+            tableLayoutPanel4.Dock = DockStyle.Fill;
+            tableLayoutPanel4.Location = new Point(3, 3);
+            tableLayoutPanel4.Name = "tableLayoutPanel4";
+            tableLayoutPanel4.RowCount = 2;
+            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
+            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 80F));
+            tableLayoutPanel4.Size = new Size(154, 444);
+            tableLayoutPanel4.TabIndex = 2;
+            // 
+            // tagTreeView
+            // 
+            tagTreeView.Dock = DockStyle.Fill;
+            tagTreeView.Location = new Point(3, 91);
+            tagTreeView.Name = "tagTreeView";
+            tagTreeView.Size = new Size(148, 350);
+            tagTreeView.TabIndex = 1;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 16.2F);
+            label1.Location = new Point(3, 0);
+            label1.Name = "label1";
+            label1.Size = new Size(144, 38);
+            label1.TabIndex = 0;
+            label1.Text = "Hiérarchie";
+            label1.TextAlign = ContentAlignment.MiddleCenter;
+            // 
             // MainView
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -226,22 +239,21 @@
             Controls.Add(tableLayoutPanel1);
             Name = "MainView";
             Text = "Photossimo";
+            Load += MainViewLoad;
             tableLayoutPanel1.ResumeLayout(false);
-            panelHierarchie.ResumeLayout(false);
-            panelHierarchie.PerformLayout();
             tableLayoutPanel2.ResumeLayout(false);
             tableLayoutPanel2.PerformLayout();
             tableLayoutPanel3.ResumeLayout(false);
             tableLayoutPanel3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            tableLayoutPanel4.ResumeLayout(false);
+            tableLayoutPanel4.PerformLayout();
             ResumeLayout(false);
         }
 
         #endregion
 
         private TableLayoutPanel tableLayoutPanel1;
-        private Panel panelHierarchie;
-        private Label label1;
         private TableLayoutPanel tableLayoutPanel2;
         private Label label3;
         private Label label2;
@@ -252,5 +264,8 @@
         private TableLayoutPanel tableLayoutPanel3;
         private TextBox textBox1;
         private DataGridView dataGridView1;
+        private TableLayoutPanel tableLayoutPanel4;
+        private TreeView tagTreeView;
+        private Label label1;
     }
 }

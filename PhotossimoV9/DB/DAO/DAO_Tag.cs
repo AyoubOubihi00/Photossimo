@@ -10,9 +10,9 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace PhotossimoV9.DB.DAO
 {
-    class DAO_Tag : DAO<Object.Tag>
+    class DAO_Tag : DAO<Object.TagImg>
     {
-        public override void Create(Tag tag, MySqlTransaction transaction)
+        public override void Create(TagImg tag, MySqlTransaction transaction)
         {
             MySqlConnection connection = DataBase.GetInstance();
             MySqlCommand command = connection.CreateCommand();
@@ -39,7 +39,7 @@ namespace PhotossimoV9.DB.DAO
             }
         }
 
-        public override void Delete(Tag tag, MySqlTransaction transaction)
+        public override void Delete(TagImg tag, MySqlTransaction transaction)
         {
             MySqlConnection connection = DataBase.GetInstance();
             MySqlCommand command = connection.CreateCommand();
@@ -58,17 +58,17 @@ namespace PhotossimoV9.DB.DAO
             }
         }
 
-        public override List<Tag> FindAll()
+        public override List<TagImg> FindAll()
         {
             MySqlConnection connection = DataBase.GetInstance();
             MySqlCommand command = connection.CreateCommand();
             command.Connection = connection;
 
-            List<Tag> listTag = [];
+            List<TagImg> listTag = [];
 
             try
             {
-                command.CommandText = "SELECT * FROM tags";
+                command.CommandText = "SELECT * FROM tags ORDER BY id_parent IS NULL DESC, id_parent ASC";
 
                 MySqlDataReader msdr = command.ExecuteReader();
                 if (msdr.HasRows)
@@ -78,10 +78,11 @@ namespace PhotossimoV9.DB.DAO
                         if (msdr["nom_tag"] is not string nomTag) throw new ArgumentNullException("NomTag invalide");
                         if (!Int32.TryParse(msdr["id_parent"].ToString(), out int idParent)) throw new ArgumentNullException("IdParent invalide");
 
-                        if(!Tag.GetTagDictionary().TryGetValue(idParent, out Tag? parent)) throw new ArgumentException("Le parent n'existe pas");
-                        Tag newTag = Tag.GetOrCreate(idTag,  nomTag, parent);
+                        if (!TagImg.GetTagDictionary().TryGetValue(idParent, out TagImg? parent)) throw new ArgumentException("Le parent n'existe pas");
+                        TagImg newTag = TagImg.GetOrCreate(idTag, nomTag, parent);
                         listTag.Add(newTag);
                     }
+                msdr.Close();
             }
             catch (Exception e)
             {
@@ -90,7 +91,7 @@ namespace PhotossimoV9.DB.DAO
             return listTag;
         }
 
-        public override void Update(Tag tag, MySqlTransaction transaction)
+        public override void Update(TagImg tag, MySqlTransaction transaction)
         {
             try
             {
@@ -99,7 +100,7 @@ namespace PhotossimoV9.DB.DAO
                 command.CommandText = "UPDATE tags SET nom_tag=@nom_tag, id_parent=@id_parent WHERE id_tag=@id_tag";
                 command.Parameters.AddWithValue("@nom_tag", tag.NomTag);
                 command.Parameters.AddWithValue("@id_parent", tag.IdTag);
-                if(tag.Parent is not null)
+                if (tag.Parent is not null)
                     command.Parameters.AddWithValue("@id_tag", tag.Parent.IdTag);
                 command.ExecuteNonQuery();
             }
@@ -108,50 +109,5 @@ namespace PhotossimoV9.DB.DAO
                 Console.WriteLine("Erreur : " + e.Message);
             }
         }
-        public void DeleteTagEtEnfants(Tag tag, MySqlTransaction transaction) // Suppression en cascade des enfants 
-        {
-            foreach(Tag enfant in tag.Enfants.ToList())
-            {
-                DeleteTagEtEnfants(enfant, transaction);
-            }
-
-            Delete(tag, transaction);
-        }
-        
-        public void DeleteAncetres(Tag tag, MySqlTransaction transaction) // Suppression des ancetres
-        {
-            Tag parent = tag.Parent;
-
-            while(parent != null)
-            {
-                Delete(parent, transaction);
-                parent = parent.Parent;
-            }
-        }
-
-        public void UpdateTagEtEnfants(Tag tag, string nouveauNom, MySqlTransaction transaction) //Modification tag + tous ses enfants 
-        {
-            tag.NomTag = nouveauNom;
-            Update(tag, transaction);
-
-            foreach (Tag enfant in tag.Enfants)
-            {
-                UpdateTagEtEnfants(enfant, nouveauNom, transaction); 
-            }
-        }
-
-        public void UpdateTagEtAncetres(Tag tag, string nouveauNom, MySqlTransaction transaction) //Modification tag + tous ses Ancetres
-        {
-            Tag courant = tag;
-
-            while (courant != null)
-            {
-                courant.NomTag = nouveauNom;
-                Update(courant, transaction);
-                courant = courant.Parent;
-            }
-        }
-
-
-
     }
+}

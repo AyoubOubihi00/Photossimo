@@ -22,10 +22,9 @@ namespace PhotossimoV9.DB.DAO
             try
             {
                 command.CommandText = "INSERT INTO images(" +
-                    "nom_image, chemin_image, date_import, tags)" +
-                    "VALUES(@nom_image, @chemin_image, @date_import, @tags);";
-                command.Parameters.AddWithValue("@nom_image", img.GetNom());
-                command.Parameters.AddWithValue("@chemin_image", img.CheminImage);
+                    "nom_image, date_import, tags)" +
+                    "VALUES(@nom_image, @nom_image, @date_import, @tags);";
+                command.Parameters.AddWithValue("@nom_image", img.NomImage);
                 command.Parameters.AddWithValue("@date_import", img.DateImport);
                 command.Parameters.AddWithValue("@tags", Utils.Utils.ParseListToString(img.ListTagToListInt()));
                 command.ExecuteNonQuery();
@@ -76,20 +75,21 @@ namespace PhotossimoV9.DB.DAO
                     while (msdr.Read())
                     {
                         if (!Int32.TryParse(msdr["id_image"].ToString(), out int idImage)) throw new ArgumentNullException("IdImage invalide");
-                        if (msdr["chemin_image"] is not string cheminImage) throw new ArgumentNullException("cheminImage invalide");
+                        if (msdr["nom_image"] is not string nomImage) throw new ArgumentNullException("NomImage invalide");
                         if (!DateTime.TryParse(msdr["date_import"].ToString(), out DateTime dateImport)) throw new ArgumentNullException("dateimport invalide");
                         if (msdr["tags"] is not string stringTags) throw new ArgumentNullException("tags invalide");
 
                         List<int> intTags = Utils.Utils.ParseNumbers(stringTags);
                         // On récupére les Tags de l'image dans le dictionnaire de Tag (évite de créer des doublons du même Tag)
-                        List<Tag> tagList = Tag.GetTagDictionary().Where(x => intTags.Contains(x.Key)).Select(x => x.Value).ToList();
+                        List<TagImg> tagList = TagImg.GetTagDictionary().Where(x => intTags.Contains(x.Key)).Select(x => x.Value).ToList();
 
-                        Img newImg = new(idImage, cheminImage, dateImport, tagList);
+                        Img newImg = new(idImage, nomImage, dateImport, tagList);
                         // On complète la liste de Tags avec tous les ancêtres des Tags déjà présents
-                        newImg.AddTagsAncestors();
-
+                        foreach(TagImg tag in newImg.Tags)
+                            newImg.AddTagsAncestors(tag);
                         listImg.Add(newImg);
                     }
+                msdr.Close();
             }
             catch (Exception e)
             {
@@ -105,7 +105,7 @@ namespace PhotossimoV9.DB.DAO
                 MySqlCommand command = DataBase.GetInstance().CreateCommand();
                 command.Transaction = transaction;
                 command.CommandText = "UPDATE images SET chemin_image=@chemin_image, date_import=@date_import, tags=@tags WHERE id_image=@id_image";
-                command.Parameters.AddWithValue("@chemin_image", img.CheminImage);
+                command.Parameters.AddWithValue("@nom_image", img.NomImage);
                 command.Parameters.AddWithValue("@date_import", img.DateImport);
                 command.Parameters.AddWithValue("@tags", Utils.Utils.ParseListToString(img.ListTagToListInt()));
                 command.Parameters.AddWithValue("@id_image", img.IdImage);
