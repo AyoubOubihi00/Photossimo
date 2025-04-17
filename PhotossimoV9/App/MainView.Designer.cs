@@ -38,7 +38,7 @@
             buttonEdit = new Button();
             tableLayoutPanel3 = new TableLayoutPanel();
             textBox1 = new TextBox();
-            button1 = new Button();
+            buttonDeleteTag = new Button();
             dataGridView1 = new DataGridView();
             tableLayoutPanel4 = new TableLayoutPanel();
             tagTreeView = new TreeView();
@@ -165,7 +165,7 @@
             tableLayoutPanel3.ColumnCount = 1;
             tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             tableLayoutPanel3.Controls.Add(textBox1, 0, 0);
-            tableLayoutPanel3.Controls.Add(button1, 0, 1);
+            tableLayoutPanel3.Controls.Add(buttonDeleteTag, 0, 1);
             tableLayoutPanel3.Dock = DockStyle.Fill;
             tableLayoutPanel3.Location = new Point(3, 82);
             tableLayoutPanel3.Name = "tableLayoutPanel3";
@@ -184,15 +184,15 @@
             textBox1.Size = new Size(392, 27);
             textBox1.TabIndex = 0;
             // 
-            // button1
+            // buttonDeleteTag
             // 
-            button1.Location = new Point(3, 42);
-            button1.Name = "button1";
-            button1.Size = new Size(133, 28);
-            button1.TabIndex = 10;
-            button1.Text = "Supprimer Tag";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += buttonSupprimerTag_Click;
+            buttonDeleteTag.Location = new Point(3, 42);
+            buttonDeleteTag.Name = "buttonDeleteTag";
+            buttonDeleteTag.Size = new Size(133, 28);
+            buttonDeleteTag.TabIndex = 10;
+            buttonDeleteTag.Text = "Supprimer Tag";
+            buttonDeleteTag.UseVisualStyleBackColor = true;
+            buttonDeleteTag.Click += buttonSupprimerTag_Click;
             // 
             // dataGridView1
             // 
@@ -279,6 +279,6 @@
         private TableLayoutPanel tableLayoutPanel4;
         private TreeView tagTreeView;
         private Label label1;
-        private Button button1;
+        private Button buttonDeleteTag;
     }
 }

@@ -70,19 +70,22 @@ namespace PhotossimoV9.DB.DAO
             {
                 command.CommandText = "SELECT * FROM tags ORDER BY id_parent IS NULL DESC, id_parent ASC";
 
-                MySqlDataReader msdr = command.ExecuteReader();
-                if (msdr.HasRows)
-                    while (msdr.Read())
+                using (MySqlDataReader msdr = command.ExecuteReader())
+                {
+                    if (msdr.HasRows)
                     {
-                        if (!Int32.TryParse(msdr["id_tag"].ToString(), out int idTag)) throw new ArgumentNullException("IdTag invalide");
-                        if (msdr["nom_tag"] is not string nomTag) throw new ArgumentNullException("NomTag invalide");
-                        if (!Int32.TryParse(msdr["id_parent"].ToString(), out int idParent)) throw new ArgumentNullException("IdParent invalide");
+                        while (msdr.Read())
+                        {
+                            if (!Int32.TryParse(msdr["id_tag"].ToString(), out int idTag)) throw new ArgumentNullException("IdTag invalide");
+                            if (msdr["nom_tag"] is not string nomTag) throw new ArgumentNullException("NomTag invalide");
+                            if (!Int32.TryParse(msdr["id_parent"].ToString(), out int idParent)) throw new ArgumentNullException("IdParent invalide");
 
-                        if (!TagImg.GetTagDictionary().TryGetValue(idParent, out TagImg? parent)) throw new ArgumentException("Le parent n'existe pas");
-                        TagImg newTag = TagImg.GetOrCreate(idTag, nomTag, parent);
-                        listTag.Add(newTag);
+                            if (!TagImg.GetTagDictionary().TryGetValue(idParent, out TagImg? parent)) throw new ArgumentException("Le parent n'existe pas");
+                            TagImg newTag = TagImg.GetOrCreate(idTag, nomTag, parent);
+                            listTag.Add(newTag);
+                        }
                     }
-                msdr.Close();
+                } 
             }
             catch (Exception e)
             {
@@ -90,6 +93,7 @@ namespace PhotossimoV9.DB.DAO
             }
             return listTag;
         }
+
 
         public override void Update(TagImg tag, MySqlTransaction transaction)
         {
@@ -99,9 +103,9 @@ namespace PhotossimoV9.DB.DAO
                 command.Transaction = transaction;
                 command.CommandText = "UPDATE tags SET nom_tag=@nom_tag, id_parent=@id_parent WHERE id_tag=@id_tag";
                 command.Parameters.AddWithValue("@nom_tag", tag.NomTag);
-                command.Parameters.AddWithValue("@id_parent", tag.IdTag);
+                command.Parameters.AddWithValue("@id_parent", tag.Parent?.IdTag ?? 0);
                 if (tag.Parent is not null)
-                    command.Parameters.AddWithValue("@id_tag", tag.Parent.IdTag);
+                    command.Parameters.AddWithValue("@id_tag", tag.IdTag);
                 command.ExecuteNonQuery();
             }
             catch (Exception e)
