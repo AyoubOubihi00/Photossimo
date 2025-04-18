@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using System.Windows.Markup;
 using MySql.Data.MySqlClient;
 using PhotossimoV9.Object;
@@ -112,6 +113,22 @@ namespace PhotossimoV9.DB.DAO
             {
                 Console.WriteLine("Erreur : " + e.Message);
             }
+        }
+
+        //Fonction pour insérer un tag dans la base de données avec le nom et le parent, recupere a partir de la fenetre pour la creation de tag
+        public void Insert(string nomTag,int? idParent)
+        {
+            MySqlConnection connection = DataBase.GetInstance();
+            MySqlCommand command = connection.CreateCommand();
+            command.CommandText = "INSERT INTO tags (nom_tag, id_parent) VALUES (@nom_tag, @id_parent)";
+            command.Parameters.AddWithValue("@nom_tag", nomTag);
+
+            if (idParent.HasValue)
+                command.Parameters.AddWithValue("@id_parent", idParent.Value);
+            else
+                command.Parameters.AddWithValue("@id_parent", DBNull.Value);
+
+            command.ExecuteNonQuery();
         }
     }
 }

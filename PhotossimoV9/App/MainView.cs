@@ -1,5 +1,6 @@
 using Google.Protobuf.Collections;
 using MySql.Data.MySqlClient;
+using PhotossimoV9.App;
 using PhotossimoV9.DB.DAO;
 using PhotossimoV9.Object;
 
@@ -46,44 +47,22 @@ namespace Photossimo
             }
         }
 
-        private void buttonSupprimerTag_Click(object sender, EventArgs e)
+
+        private void ButtonGestionTag(object sender, EventArgs e)
         {
-            TreeNode selectedNode = tagTreeView.SelectedNode;
+            GestionTag gestionTagForm = new GestionTag();
+            var result = gestionTagForm.ShowDialog();
 
-            if (selectedNode == null)
+            // On vérifie si le tag a été supprimer et si le cas "oui" on recharge l'arbre
+            if (result == DialogResult.OK)
             {
-                MessageBox.Show("Veuillez sélectionner un tag à supprimer.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            if (selectedNode.Tag is TagImg selectedTag)
-            {
-                // On traite le cas de la racine donc on la suprrimer pas root
-                if (selectedTag.IdTag == 0)
-                {
-                    MessageBox.Show("Impossible de supprimer le tag racine.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-                // On traite le cas de suppriemr l'enfant
-                if (selectedTag.Enfants.Count == 0) {
-
-                    selectedTag.SupprimerEnfant();
-                    MessageBox.Show("Tag supprimé avec succès.", "Succès", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                // On traite le cas de supprimer le parent qui a des fills 
-                else
-                {
-                    selectedTag.SupprimerParent();
-                    MessageBox.Show("Tag supprimé avec succès.", "Succès", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
+                
                 TagImg.ClearDictionary();
                 TagImg.InitializeDictionary();
-                LoadTagTreeView();
+                LoadTagTreeView();  // On recharge l'arbre avce les tag ajoute , ou avec le tag supprimé
             }
-            else
-            {
-                MessageBox.Show("Erreur lors de la suppression du tag.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            
+
         }
     }
 }

@@ -1,0 +1,108 @@
+﻿namespace PhotossimoV9.App
+{
+    partial class GestionTag
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            rechercheBox = new TextBox();
+            button1 = new Button();
+            labelResultat = new Label();
+            button2 = new Button();
+            button3 = new Button();
+            SuspendLayout();
+            // 
+            // rechercheBox
+            // 
+            rechercheBox.Location = new Point(12, 25);
+            rechercheBox.Name = "rechercheBox";
+            rechercheBox.Size = new Size(306, 27);
+            rechercheBox.TabIndex = 0;
+            // 
+            // button1
+            // 
+            button1.Location = new Point(447, 25);
+            button1.Name = "button1";
+            button1.Size = new Size(237, 29);
+            button1.TabIndex = 1;
+            button1.Text = "Recherche";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += buttonRecherche_Click;
+            // 
+            // labelResultat
+            // 
+            labelResultat.AutoSize = true;
+            labelResultat.Location = new Point(338, 111);
+            labelResultat.Name = "labelResultat";
+            labelResultat.Size = new Size(95, 20);
+            labelResultat.TabIndex = 2;
+            labelResultat.Text = "labelResultat";
+            // 
+            // button2
+            // 
+            button2.Location = new Point(12, 216);
+            button2.Name = "button2";
+            button2.Size = new Size(306, 29);
+            button2.TabIndex = 3;
+            button2.Text = "Supprimer Tag";
+            button2.UseVisualStyleBackColor = true;
+            button2.Click += ButtonSuppresion;
+            // 
+            // button3
+            // 
+            button3.Location = new Point(381, 216);
+            button3.Name = "button3";
+            button3.Size = new Size(281, 29);
+            button3.TabIndex = 4;
+            button3.Text = "Creation Tag";
+            button3.UseVisualStyleBackColor = true;
+            button3.Click += CreationTag;
+            // 
+            // GestionTag
+            // 
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(800, 450);
+            Controls.Add(button3);
+            Controls.Add(button2);
+            Controls.Add(labelResultat);
+            Controls.Add(button1);
+            Controls.Add(rechercheBox);
+            Name = "GestionTag";
+            Text = "Gestion_Tag";
+            ResumeLayout(false);
+            PerformLayout();
+        }
+
+        #endregion
+
+        private TextBox rechercheBox;
+        private Button button1;
+        private Label labelResultat;
+        private Button button2;
+        private Button button3;
+    }
+}

@@ -31,10 +31,10 @@
             label1 = new Label();
             label2 = new Label();
             tableLayoutPanel1 = new TableLayoutPanel();
-            textBox1 = new TextBox();
+            textBoxNomTag = new TextBox();
             label3 = new Label();
             tableLayoutPanel2 = new TableLayoutPanel();
-            textBox2 = new TextBox();
+            textBoxParent = new TextBox();
             button1 = new Button();
             button2 = new Button();
             tableLayoutPanel1.SuspendLayout();
@@ -65,7 +65,7 @@
             // 
             tableLayoutPanel1.ColumnCount = 1;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.Controls.Add(textBox1, 0, 0);
+            tableLayoutPanel1.Controls.Add(textBoxNomTag, 0, 0);
             tableLayoutPanel1.Location = new Point(92, 140);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 1;
@@ -73,12 +73,12 @@
             tableLayoutPanel1.Size = new Size(602, 30);
             tableLayoutPanel1.TabIndex = 6;
             // 
-            // textBox1
+            // textBoxNomTag
             // 
-            textBox1.Location = new Point(3, 3);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(596, 27);
-            textBox1.TabIndex = 0;
+            textBoxNomTag.Location = new Point(3, 3);
+            textBoxNomTag.Name = "textBoxNomTag";
+            textBoxNomTag.Size = new Size(596, 27);
+            textBoxNomTag.TabIndex = 0;
             // 
             // label3
             // 
@@ -94,7 +94,7 @@
             // 
             tableLayoutPanel2.ColumnCount = 1;
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel2.Controls.Add(textBox2, 0, 0);
+            tableLayoutPanel2.Controls.Add(textBoxParent, 0, 0);
             tableLayoutPanel2.Location = new Point(95, 258);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 1;
@@ -102,12 +102,12 @@
             tableLayoutPanel2.Size = new Size(596, 31);
             tableLayoutPanel2.TabIndex = 8;
             // 
-            // textBox2
+            // textBoxParent
             // 
-            textBox2.Location = new Point(3, 3);
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(590, 27);
-            textBox2.TabIndex = 0;
+            textBoxParent.Location = new Point(3, 3);
+            textBoxParent.Name = "textBoxParent";
+            textBoxParent.Size = new Size(590, 27);
+            textBoxParent.TabIndex = 0;
             // 
             // button1
             // 
@@ -126,6 +126,7 @@
             button2.TabIndex = 10;
             button2.Text = "Valider";
             button2.UseVisualStyleBackColor = true;
+            button2.Click += buttonValider;
             // 
             // CreateTag
             // 
@@ -155,10 +156,10 @@
         private Label label1;
         private Label label2;
         private TableLayoutPanel tableLayoutPanel1;
-        private TextBox textBox1;
+        private TextBox textBoxNomTag;
         private Label label3;
         private TableLayoutPanel tableLayoutPanel2;
-        private TextBox textBox2;
+        private TextBox textBoxParent;
         private Button button1;
         private Button button2;
     }

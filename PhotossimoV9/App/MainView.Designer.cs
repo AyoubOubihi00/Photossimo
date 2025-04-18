@@ -38,7 +38,6 @@
             buttonEdit = new Button();
             tableLayoutPanel3 = new TableLayoutPanel();
             textBox1 = new TextBox();
-            buttonDeleteTag = new Button();
             dataGridView1 = new DataGridView();
             tableLayoutPanel4 = new TableLayoutPanel();
             tagTreeView = new TreeView();
@@ -145,8 +144,9 @@
             buttonCreateTag.Name = "buttonCreateTag";
             buttonCreateTag.Size = new Size(89, 59);
             buttonCreateTag.TabIndex = 7;
-            buttonCreateTag.Text = "Créer Tag";
+            buttonCreateTag.Text = "Gestion Tag";
             buttonCreateTag.UseVisualStyleBackColor = true;
+            buttonCreateTag.Click += ButtonGestionTag;
             // 
             // buttonEdit
             // 
@@ -165,7 +165,6 @@
             tableLayoutPanel3.ColumnCount = 1;
             tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             tableLayoutPanel3.Controls.Add(textBox1, 0, 0);
-            tableLayoutPanel3.Controls.Add(buttonDeleteTag, 0, 1);
             tableLayoutPanel3.Dock = DockStyle.Fill;
             tableLayoutPanel3.Location = new Point(3, 82);
             tableLayoutPanel3.Name = "tableLayoutPanel3";
@@ -183,16 +182,6 @@
             textBox1.Name = "textBox1";
             textBox1.Size = new Size(392, 27);
             textBox1.TabIndex = 0;
-            // 
-            // buttonDeleteTag
-            // 
-            buttonDeleteTag.Location = new Point(3, 42);
-            buttonDeleteTag.Name = "buttonDeleteTag";
-            buttonDeleteTag.Size = new Size(133, 28);
-            buttonDeleteTag.TabIndex = 10;
-            buttonDeleteTag.Text = "Supprimer Tag";
-            buttonDeleteTag.UseVisualStyleBackColor = true;
-            buttonDeleteTag.Click += buttonSupprimerTag_Click;
             // 
             // dataGridView1
             // 
@@ -279,6 +268,5 @@
         private TableLayoutPanel tableLayoutPanel4;
         private TreeView tagTreeView;
         private Label label1;
-        private Button buttonDeleteTag;
     }
 }
