@@ -41,7 +41,7 @@ namespace Photossimo
 
             }
 
-            if (parentTag == null) 
+            if (parentTag == null)
             {
                 TagImg.GetTagDictionary().TryGetValue(0, out parentTag);
             }
@@ -66,6 +66,21 @@ namespace Photossimo
 
 
 
+            }
+        }
+
+        // Fonction pour annuler la création d'un tag
+        private void buttonAnnuler(object sender, EventArgs e)
+        {
+
+            var confirmation = MessageBox.Show("Vous êtes sur le point d'annuler la création du tag. Voulez-vous vraiment continuer ?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+
+            if(confirmation == DialogResult.Yes)
+            {
+                // On ferme la fenêtre de création de tag si on a clique sur le bouton annuler
+                this.DialogResult = DialogResult.Cancel;
+                this.Close();
             }
         }
     }

@@ -37,7 +37,6 @@ namespace PhotossimoV9.App
             {
                 labelResultat.Text = "Aucun tag trouvé.";
                 rechercheBox.Text = "";
-                labelResultat.Text = "";
                 tagTrouve = null;
             }
 
