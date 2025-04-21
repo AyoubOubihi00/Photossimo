@@ -33,6 +33,7 @@
             labelResultat = new Label();
             button2 = new Button();
             button3 = new Button();
+            button4 = new Button();
             SuspendLayout();
             // 
             // rechercheBox
@@ -65,7 +66,7 @@
             // 
             button2.Location = new Point(12, 216);
             button2.Name = "button2";
-            button2.Size = new Size(306, 29);
+            button2.Size = new Size(216, 29);
             button2.TabIndex = 3;
             button2.Text = "Supprimer Tag";
             button2.UseVisualStyleBackColor = true;
@@ -73,19 +74,30 @@
             // 
             // button3
             // 
-            button3.Location = new Point(381, 216);
+            button3.Location = new Point(280, 216);
             button3.Name = "button3";
-            button3.Size = new Size(281, 29);
+            button3.Size = new Size(211, 29);
             button3.TabIndex = 4;
             button3.Text = "Creation Tag";
             button3.UseVisualStyleBackColor = true;
             button3.Click += CreationTag;
+            // 
+            // button4
+            // 
+            button4.Location = new Point(541, 216);
+            button4.Name = "button4";
+            button4.Size = new Size(172, 29);
+            button4.TabIndex = 5;
+            button4.Text = "Modification Tag";
+            button4.UseVisualStyleBackColor = true;
+            button4.Click += ModificationTag;
             // 
             // GestionTag
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(button4);
             Controls.Add(button3);
             Controls.Add(button2);
             Controls.Add(labelResultat);
@@ -104,5 +116,6 @@
         private Label labelResultat;
         private Button button2;
         private Button button3;
+        private Button button4;
     }
 }

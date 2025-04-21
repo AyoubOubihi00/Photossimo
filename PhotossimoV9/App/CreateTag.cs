@@ -34,13 +34,15 @@ namespace Photossimo
             }
 
             TagImg? parentTag = null;
-            if (!string.IsNullOrEmpty(nomParentTag)) // on verifie si le nome du parent du tag qu'on veut creer est vide
+            if (!string.IsNullOrEmpty(nomParentTag)) // on verifie si le nome du parent du tag qu'on veut creer n'es pas vide
             {
+                
                 parentTag = TagImg.GetTagDictionary().Values
                     .FirstOrDefault(tag => tag.NomTag.Equals(nomParentTag, StringComparison.OrdinalIgnoreCase));
 
             }
 
+            // Si le parentTag n'existe pas, on vas l'associer au tag racine (id 0)
             if (parentTag == null)
             {
                 TagImg.GetTagDictionary().TryGetValue(0, out parentTag);
@@ -48,7 +50,7 @@ namespace Photossimo
 
             try
             {
-                TagImg nouveauTag = TagImg.GetOrCreate(0, nomTag, parentTag); // On crre un nouveau tag 
+                TagImg nouveauTag = TagImg.GetOrCreate(0, nomTag, parentTag); // On cree un nouveau tag 
 
                 //on l'ajoute à la base de données
                 DAO_Tag daoTag = new DAO_Tag();

@@ -9,7 +9,7 @@ using PhotossimoV9.DB.DAO;
 
 namespace PhotossimoV9.Object
 {
-    class TagImg
+    public class TagImg
     {
         private TagImg? _parent;
         private static Dictionary<int, TagImg> _tagDictionary = [];

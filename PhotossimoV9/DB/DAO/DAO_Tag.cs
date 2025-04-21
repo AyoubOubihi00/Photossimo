@@ -105,8 +105,8 @@ namespace PhotossimoV9.DB.DAO
                 command.CommandText = "UPDATE tags SET nom_tag=@nom_tag, id_parent=@id_parent WHERE id_tag=@id_tag";
                 command.Parameters.AddWithValue("@nom_tag", tag.NomTag);
                 command.Parameters.AddWithValue("@id_parent", tag.Parent?.IdTag ?? 0);
-                if (tag.Parent is not null)
-                    command.Parameters.AddWithValue("@id_tag", tag.IdTag);
+                command.Parameters.AddWithValue("@id_tag", tag.IdTag);
+
                 command.ExecuteNonQuery();
             }
             catch (Exception e)

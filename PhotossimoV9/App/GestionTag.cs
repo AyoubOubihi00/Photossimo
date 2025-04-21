@@ -53,7 +53,8 @@ namespace PhotossimoV9.App
 
             if (tagTrouve.IdTag == 0) // Vérifie si le tag trouvé est la racine
             {
-                MessageBox.Show("Impossible de supprimer le tag racine.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                
+                MessageBox.Show(" Impossible de supprimer le tag racine.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -89,6 +90,39 @@ namespace PhotossimoV9.App
             if (result == DialogResult.OK) // On verifie si le tag a ete cree avec succes , et alors on rafrachit la liste des tag ds la mainview
             {
 
+                TagImg.ClearDictionary();
+                TagImg.InitializeDictionary();
+
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+            }
+        }
+
+        private void ModificationTag(object sender, EventArgs e)
+        {
+            string recherhceTag = rechercheBox.Text.Trim().ToLower();
+
+            tagTrouve = TagImg.GetTagDictionary().Values
+                .FirstOrDefault(tag => tag.NomTag.ToLower().Contains(recherhceTag));
+
+            if (string.IsNullOrEmpty(recherhceTag))
+            {
+                MessageBox.Show("Veuillez d'abord rechercher un tag avant de le modfier.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if(tagTrouve == null)
+            {
+                MessageBox.Show("Aucun tag sélectionné pour modification.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            ModificationTag modificationTagForm = new ModificationTag(tagTrouve); // On va creer l'instance de la fenêtre de création de tag
+
+            var result = modificationTagForm.ShowDialog(); // Ici on va afficheer  la fenêtre de création de tag
+
+            if(result == DialogResult.OK )
+            {
                 TagImg.ClearDictionary();
                 TagImg.InitializeDictionary();
 
