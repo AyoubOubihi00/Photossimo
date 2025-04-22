@@ -84,9 +84,9 @@ namespace PhotossimoV9.App
                 if(!string.IsNullOrEmpty(nouveauNomParentTag)) // ici on verifie si le nom du parent tag n'est pas vide
                 {
                     var parentTag = TagImg.GetTagDictionary().Values
-                        .FirstOrDefault(tag => tag.NomTag.Equals(nouveauNomParentTag, StringComparison.OrdinalIgnoreCase));
-                    
-                    if(parentTag == null) // si le parent tag n'existe pas
+                        .FirstOrDefault(tag => tag.NomTag.Equals(nouveauNomParentTag, StringComparison.OrdinalIgnoreCase)); // ici on va chercher le parent tag dans la base de données
+
+                    if (parentTag == null) // si le parent tag n'existe pas
                     {
                         MessageBox.Show("Le parent tag n'existe pas.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         transaction.Rollback();

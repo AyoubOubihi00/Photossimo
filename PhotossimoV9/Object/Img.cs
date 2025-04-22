@@ -33,13 +33,13 @@ namespace PhotossimoV9.Object
             DateImport = dateImport;
             this.Tags = Tags ?? []; // Si Tags est null, on initialise une liste vide
 
-            try { 
+            /*try { 
                     Image = Image.FromFile(GetCheminImage());
             }
             catch (FileNotFoundException e) {
                 Console.WriteLine(e.Message);
-            }
-            foreach(TagImg tag in this.Tags)
+            }*/
+            foreach(TagImg tag in this.Tags.ToList())
                 AddTagsAncestors(tag);
         }
 

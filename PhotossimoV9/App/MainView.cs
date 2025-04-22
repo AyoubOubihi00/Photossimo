@@ -22,8 +22,9 @@ namespace Photossimo
 
         private void MainViewLoad(object sender, EventArgs e)
         {
-            listImg = new DAO_Image().FindAll();
+
             TagImg.InitializeDictionary();
+            listImg = new DAO_Image().FindAll();
             LoadTagTreeView();
         }
 

@@ -13,6 +13,7 @@ namespace Photossimo
     public partial class ImageImportView : Form
     {
         Image imgSelected;
+        private string FileImageSelectionne;
         public ImageImportView()
         {
             InitializeComponent();
@@ -27,6 +28,7 @@ namespace Photossimo
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 imgSelected = Image.FromFile(openFileDialog.FileName);
+                FileImageSelectionne = Path.GetFileName(openFileDialog.FileName);
                 pictureBox1.Image = imgSelected;
             }
         }
@@ -47,7 +49,7 @@ namespace Photossimo
             ImageConsultView imgConsultView = new ImageConsultView(
                                                   "Sélection des Tags",
                                                   "Prévisualisation de l'image",
-                                                  "Tag(s) de l'image", imgSelected);
+                                                  "Tag(s) de l'image", imgSelected, FileImageSelectionne);
             imgConsultView.ShowDialog();
         }
     }

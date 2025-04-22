@@ -152,6 +152,13 @@ namespace PhotossimoV9.App
                 return;
             }
 
+            if (tagTrouve.IdTag == 0) // Vérifie si le tag trouvé est la racine
+            {
+
+                MessageBox.Show(" Impossible de modfifier le tag racine.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             ModificationTag modificationTagForm = new ModificationTag(tagTrouve); // On va creer l'instance de la fenêtre de création de tag
 
             var result = modificationTagForm.ShowDialog(); // Ici on va afficheer  la fenêtre de création de tag

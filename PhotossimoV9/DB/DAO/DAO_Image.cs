@@ -22,9 +22,9 @@ namespace PhotossimoV9.DB.DAO
             try
             {
                 command.CommandText = "INSERT INTO images(" +
-                    "nom_image, date_import, tags)" +
-                    "VALUES(@nom_image, @nom_image, @date_import, @tags);";
-                command.Parameters.AddWithValue("@nom_image", img.NomImage);
+                    "chemin_image, date_import, tags)" +
+                    "VALUES(@chemin_image, @date_import, @tags);";
+                command.Parameters.AddWithValue("@chemin_image", img.NomImage);
                 command.Parameters.AddWithValue("@date_import", img.DateImport);
                 command.Parameters.AddWithValue("@tags", Utils.Utils.ParseListToString(img.ListTagToListInt()));
                 command.ExecuteNonQuery();
@@ -33,7 +33,7 @@ namespace PhotossimoV9.DB.DAO
                 command.CommandText = "SELECT LAST_INSERT_ID();";
                 img.IdImage = Convert.ToInt32(command.ExecuteScalar());
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine("Erreur : " + e.Message);
             }
@@ -52,7 +52,7 @@ namespace PhotossimoV9.DB.DAO
                 command.Parameters.AddWithValue("@id_image", img.IdImage);
                 command.ExecuteNonQuery();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine("Erreur : " + e.Message);
             }
@@ -85,7 +85,7 @@ namespace PhotossimoV9.DB.DAO
 
                         Img newImg = new(idImage, nomImage, dateImport, tagList);
                         // On complète la liste de Tags avec tous les ancêtres des Tags déjà présents
-                        foreach(TagImg tag in newImg.Tags)
+                        foreach (TagImg tag in newImg.Tags)
                             newImg.AddTagsAncestors(tag);
                         listImg.Add(newImg);
                     }
@@ -115,6 +115,24 @@ namespace PhotossimoV9.DB.DAO
             {
                 Console.WriteLine("Erreur : " + e.Message);
             }
+        }
+
+        public void Insert(Img img)
+        {
+            var connection = DataBase.GetInstance();
+            var transaction = connection.BeginTransaction();
+
+            try
+            {
+                Create(img, transaction);
+                transaction.Commit();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Erreur lors de l'insertion dans la table image : " + e.Message);
+                transaction.Rollback();
+            }
+
         }
     }
 }
