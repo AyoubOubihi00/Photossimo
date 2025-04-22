@@ -20,40 +20,73 @@ namespace PhotossimoV9.App
         public GestionTag()
         {
             InitializeComponent();
+
+            if (TagImg.GetTagDictionary().TryGetValue(0, out var rootTag))
+            {
+                comboBoxTag.Items.Add(rootTag.NomTag);
+            }
+
+            var tagTries = TagImg.GetTagDictionary().Values.Where(tag => tag.IdTag != 0).OrderBy(tag => tag.NomTag).ToList();
+
+            foreach (var tag in tagTries)
+            {
+               
+                comboBoxTag.Items.Add(tag.NomTag);
+                
+
+            }
         }
 
         public void buttonRecherche_Click(object sender, EventArgs e)
         {
             string recherhceTag = rechercheBox.Text.Trim().ToLower();
+            string tagselectionne = comboBoxTag.SelectedItem != null ? comboBoxTag.SelectedItem.ToString() : "";
 
-            tagTrouve = TagImg.GetTagDictionary().Values
-                .FirstOrDefault(tag => tag.NomTag.ToLower().Contains(recherhceTag));
+            string nomTagRecherhce = !string.IsNullOrEmpty(recherhceTag) ? recherhceTag : tagselectionne;
 
-            if (tagTrouve != null)
+
+            if (string.IsNullOrEmpty(nomTagRecherhce))
+            {
+                labelResultat.Text = "Veuillez entrer ou selectionne un tag";
+                return;
+            }
+            tagTrouve = TagImg.GetTagDictionary().Values.FirstOrDefault(tag => tag.NomTag.Equals(nomTagRecherhce, StringComparison.OrdinalIgnoreCase));
+
+            if(tagTrouve != null)
             {
                 labelResultat.Text = $"Tag trouvé : {tagTrouve.NomTag}";
-            }
-            else
+            }else
             {
                 labelResultat.Text = "Aucun tag trouvé.";
                 rechercheBox.Text = "";
+                comboBoxTag.SelectedIndex = -1;
                 tagTrouve = null;
             }
-
 
         }
         // Button pour la suppression d'un tag
         public void ButtonSuppresion(object sender, EventArgs e)
         {
+            
+            if(tagTrouve == null)
+            {
+                string tagselectionne = comboBoxTag.SelectedItem != null ? comboBoxTag.SelectedItem.ToString() : "";
+
+                if (!string.IsNullOrEmpty(tagselectionne))
+                {
+                    tagTrouve = TagImg.GetTagDictionary().Values.FirstOrDefault(tag => tag.NomTag.Equals(tagselectionne, StringComparison.OrdinalIgnoreCase));
+                }
+            }
+            
             if (tagTrouve == null) // Vérifie si un tag a été trouvé
             {
-                MessageBox.Show("Aucun tag sélectionné pour suppression.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Avant de pouvoir supprimer, vous devez écrire le tag que vous souhaitez supprimer ou le  choisir dans la liste.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             if (tagTrouve.IdTag == 0) // Vérifie si le tag trouvé est la racine
             {
-                
+
                 MessageBox.Show(" Impossible de supprimer le tag racine.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
@@ -71,6 +104,7 @@ namespace PhotossimoV9.App
 
             rechercheBox.Text = "";// on vide la zone de recherche
             labelResultat.Text = "";// on vide le label de resultat
+            comboBoxTag.SelectedIndex = -1;
             tagTrouve = null;// on vide le tag trouvé
 
 
@@ -100,20 +134,21 @@ namespace PhotossimoV9.App
 
         private void ModificationTag(object sender, EventArgs e)
         {
-            string recherhceTag = rechercheBox.Text.Trim().ToLower();
 
-            tagTrouve = TagImg.GetTagDictionary().Values
-                .FirstOrDefault(tag => tag.NomTag.ToLower().Contains(recherhceTag));
-
-            if (string.IsNullOrEmpty(recherhceTag))
+            // ici on va verifier si le tag a ete selectionne ou saisi dans la zone de recherche
+            if (tagTrouve == null)
             {
-                MessageBox.Show("Veuillez d'abord rechercher un tag avant de le modfier.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                string tagselectionne = comboBoxTag.SelectedItem != null ? comboBoxTag.SelectedItem.ToString() : "";
+
+                if (!string.IsNullOrEmpty(tagselectionne))
+                {
+                    tagTrouve = TagImg.GetTagDictionary().Values.FirstOrDefault(tag => tag.NomTag.Equals(tagselectionne, StringComparison.OrdinalIgnoreCase));
+                }
             }
 
-            if(tagTrouve == null)
+            if (tagTrouve == null)
             {
-                MessageBox.Show("Aucun tag sélectionné pour modification.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Avant de pouvoir modifier, vous devez écrire le tag que vous souhaitez supprimer ou le  choisir dans la liste.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -121,7 +156,7 @@ namespace PhotossimoV9.App
 
             var result = modificationTagForm.ShowDialog(); // Ici on va afficheer  la fenêtre de création de tag
 
-            if(result == DialogResult.OK )
+            if (result == DialogResult.OK)
             {
                 TagImg.ClearDictionary();
                 TagImg.InitializeDictionary();

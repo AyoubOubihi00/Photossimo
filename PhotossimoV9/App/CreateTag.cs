@@ -19,13 +19,28 @@ namespace Photossimo
         public CreateTag()
         {
             InitializeComponent();
+
+            if(TagImg.GetTagDictionary().TryGetValue(0,out var rootTag))
+            {
+                comboBoxParent.Items.Add(rootTag.NomTag);
+            }
+
+            var tagTries = TagImg.GetTagDictionary().Values.Where(tag => tag.IdTag !=0).OrderBy(tag => tag.NomTag).ToList();
+
+            foreach (var tag in tagTries)
+            {
+                
+                comboBoxParent.Items.Add(tag.NomTag);
+                
+
+            }
         }
 
         //Fonction pour valider la création d'un tag
         private void buttonValider(object sender, EventArgs e)
         {
             string nomTag = textBoxNomTag.Text.Trim();// on récupére le nom du tag
-            string nomParentTag = textBoxParent.Text.Trim(); // on récupére le nom du parent tag
+            string nomParentTag = comboBoxParent.SelectedItem?.ToString(); // on récupére le nom du parent tag
 
             if (string.IsNullOrEmpty(nomTag)) //on verifie si le nom du tag est vide
             {
@@ -36,7 +51,7 @@ namespace Photossimo
             TagImg? parentTag = null;
             if (!string.IsNullOrEmpty(nomParentTag)) // on verifie si le nome du parent du tag qu'on veut creer n'es pas vide
             {
-                
+
                 parentTag = TagImg.GetTagDictionary().Values
                     .FirstOrDefault(tag => tag.NomTag.Equals(nomParentTag, StringComparison.OrdinalIgnoreCase));
 
@@ -78,7 +93,7 @@ namespace Photossimo
             var confirmation = MessageBox.Show("Vous êtes sur le point d'annuler la création du tag. Voulez-vous vraiment continuer ?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
 
-            if(confirmation == DialogResult.Yes)
+            if (confirmation == DialogResult.Yes)
             {
                 // On ferme la fenêtre de création de tag si on a clique sur le bouton annuler
                 this.DialogResult = DialogResult.Cancel;

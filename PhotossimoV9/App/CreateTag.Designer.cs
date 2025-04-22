@@ -34,7 +34,7 @@
             textBoxNomTag = new TextBox();
             label3 = new Label();
             tableLayoutPanel2 = new TableLayoutPanel();
-            textBoxParent = new TextBox();
+            comboBoxParent = new ComboBox();
             button1 = new Button();
             button2 = new Button();
             tableLayoutPanel1.SuspendLayout();
@@ -94,20 +94,21 @@
             // 
             tableLayoutPanel2.ColumnCount = 1;
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel2.Controls.Add(textBoxParent, 0, 0);
+            tableLayoutPanel2.Controls.Add(comboBoxParent, 0, 0);
             tableLayoutPanel2.Location = new Point(95, 258);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 1;
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel2.Size = new Size(596, 31);
+            tableLayoutPanel2.Size = new Size(154, 31);
             tableLayoutPanel2.TabIndex = 8;
             // 
-            // textBoxParent
+            // comboBoxParent
             // 
-            textBoxParent.Location = new Point(3, 3);
-            textBoxParent.Name = "textBoxParent";
-            textBoxParent.Size = new Size(590, 27);
-            textBoxParent.TabIndex = 0;
+            comboBoxParent.FormattingEnabled = true;
+            comboBoxParent.Location = new Point(3, 3);
+            comboBoxParent.Name = "comboBoxParent";
+            comboBoxParent.Size = new Size(148, 28);
+            comboBoxParent.TabIndex = 11;
             // 
             // button1
             // 
@@ -146,7 +147,6 @@
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
             tableLayoutPanel2.ResumeLayout(false);
-            tableLayoutPanel2.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
 
@@ -160,8 +160,8 @@
         private TextBox textBoxNomTag;
         private Label label3;
         private TableLayoutPanel tableLayoutPanel2;
-        private TextBox textBoxParent;
         private Button button1;
         private Button button2;
+        private ComboBox comboBoxParent;
     }
 }

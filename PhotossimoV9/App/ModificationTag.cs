@@ -72,12 +72,6 @@ namespace PhotossimoV9.App
                         tagmodifier.Parent = parentTag; // ici on associe le parent tag au tag qu'on veut modifier
                     }
                 }
-                else
-                {
-                    // Si le parentTag n'existe pas, on vas l'associer au tag racine (id 0)
-                    TagImg.GetTagDictionary().TryGetValue(0, out TagImg? racine);
-                    tagmodifier.Parent = racine;
-                }
                 // ici on va modifier le tag dans la base de données
                 dao.Update(tagmodifier, transaction);
 
