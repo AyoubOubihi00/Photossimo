@@ -22,6 +22,8 @@ namespace PhotossimoV9.App
             tagmodifier = tag; // ici on recupére le tag qu'on veut modifier
 
             textBoxNomTag.Text = tagmodifier.NomTag; // ici on affiche le nom du tag qu'on veut modifier
+            textBoxNomTag.ReadOnly = true;
+            textBoxParent.ReadOnly = true;
 
             if (tagmodifier.Parent != null) // ici on verifie si le tag qu'on veut modifier a un parent
             {
@@ -31,15 +33,38 @@ namespace PhotossimoV9.App
                 }
 
             }
-            textBoxNomTag.ReadOnly = true;
-            textBoxParent.ReadOnly = true;
+
+            if (TagImg.GetTagDictionary().TryGetValue(0, out var rootTag))
+            {
+                comboBoxParent.Items.Add(rootTag.NomTag);
+            }
+
+            var tagTries = TagImg.GetTagDictionary().Values.Where(tag => tag.IdTag != 0).OrderBy(tag => tag.NomTag).ToList();
+
+            foreach (var parent in tagTries)
+            {
+
+                comboBoxParent.Items.Add(parent.NomTag);
+
+
+            }
+
+
         }
 
         // Fonction pour valider la modification d'un tag
         private void ValiderModification(object sender, EventArgs e)
         {
             string nouveauNomTag = textBoxNomTagNew.Text.Trim(); // ici on récupére le nom du tag
-            string nouveauNomParentTag = textBoxParentNew.Text.Trim(); // ici on récupére le nom du parent tag si en a un 
+            string nouveauNomParentTag;// ici on récupére le nom du parent tag selectione dans la liste 
+            if(comboBoxParent.SelectedItem != null)
+            {
+                nouveauNomParentTag = comboBoxParent.SelectedItem.ToString();
+            }else
+            {
+                nouveauNomParentTag = "";
+            }
+
 
             if (string.IsNullOrEmpty(nouveauNomTag)) // on verifie si le nom du tag est vide
             {

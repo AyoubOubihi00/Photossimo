@@ -37,7 +37,7 @@
             label3 = new Label();
             textBoxNomTagNew = new TextBox();
             label4 = new Label();
-            textBoxParentNew = new TextBox();
+            comboBoxParent = new ComboBox();
             SuspendLayout();
             // 
             // label1
@@ -116,19 +116,20 @@
             label4.TabIndex = 8;
             label4.Text = "Nouveau Tag Parent (optionnel) :";
             // 
-            // textBoxParentNew
+            // comboBoxParent
             // 
-            textBoxParentNew.Location = new Point(420, 207);
-            textBoxParentNew.Name = "textBoxParentNew";
-            textBoxParentNew.Size = new Size(225, 27);
-            textBoxParentNew.TabIndex = 9;
+            comboBoxParent.FormattingEnabled = true;
+            comboBoxParent.Location = new Point(420, 207);
+            comboBoxParent.Name = "comboBoxParent";
+            comboBoxParent.Size = new Size(225, 28);
+            comboBoxParent.TabIndex = 10;
             // 
             // ModificationTag
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
-            Controls.Add(textBoxParentNew);
+            Controls.Add(comboBoxParent);
             Controls.Add(label4);
             Controls.Add(textBoxNomTagNew);
             Controls.Add(label3);
@@ -155,6 +156,6 @@
         private Label label3;
         private TextBox textBoxNomTagNew;
         private Label label4;
-        private TextBox textBoxParentNew;
+        private ComboBox comboBoxParent;
     }
 }
