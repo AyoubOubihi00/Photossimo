@@ -1,175 +1,199 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using Photossimo;
+using PhotossimoV9.DB;
 using PhotossimoV9.DB.DAO;
 using PhotossimoV9.Object;
-using PhotossimoV9.App;
-using Photossimo;
 
 namespace PhotossimoV9.App
 {
     public partial class GestionTag : Form
     {
-        private TagImg? tagTrouve = null;
+        private BindingSource _bsTags = new BindingSource();
+
         public GestionTag()
         {
             InitializeComponent();
+            LoadTags();
+            AttachEvents();
+        }
 
-            if (TagImg.GetTagDictionary().TryGetValue(0, out var rootTag))
+        // Charge et filtre les tags, triés alphabétiquement
+        private void LoadTags(string filter = "")
+        {
+            var list = TagImg.GetTagDictionary().Values
+                .Where(t => string.IsNullOrEmpty(filter) ||
+                            t.NomTag.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0)
+                .OrderBy(t => t.NomTag)
+                .Select(t => new
+                {
+                    t.IdTag,
+                    t.NomTag,
+                    ParentNom = t.Parent?.NomTag ?? "<racine>"
+                })
+                .ToList();
+
+            _bsTags.DataSource = list;
+            dgvTags.DataSource = _bsTags;
+        }
+
+        private void AttachEvents()
+        {
+            dgvTags.CurrentCellDirtyStateChanged += DgvTags_CurrentCellDirtyStateChanged;
+            dgvTags.DataBindingComplete += DgvTags_DataBindingComplete;
+            dgvTags.CellValueChanged += DgvTags_CellValueChanged;
+            dgvTags.CellContentClick += DgvTags_CellContentClick;
+        }
+
+        // Commit click on checkbox
+        private void DgvTags_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == dgvTags.Columns["colSelect"].Index && e.RowIndex >= 0)
             {
-                comboBoxTag.Items.Add(rootTag.NomTag);
-            }
-
-            var tagTries = TagImg.GetTagDictionary().Values.Where(tag => tag.IdTag != 0).OrderBy(tag => tag.NomTag).ToList();
-
-            foreach (var tag in tagTries)
-            {
-               
-                comboBoxTag.Items.Add(tag.NomTag);
-                
-
+                dgvTags.CommitEdit(DataGridViewDataErrorContexts.Commit);
+                UpdateDeleteButtons();
             }
         }
 
-        public void buttonRecherche_Click(object sender, EventArgs e)
+        // Filtrage live à la frappe
+        private void TxtRecherche_TextChanged(object sender, EventArgs e)
         {
-            string recherhceTag = rechercheBox.Text.Trim().ToLower();
-            string tagselectionne = comboBoxTag.SelectedItem != null ? comboBoxTag.SelectedItem.ToString() : "";
+            LoadTags(txtRecherche.Text.Trim());
+        }
 
-            string nomTagRecherhce = !string.IsNullOrEmpty(recherhceTag) ? recherhceTag : tagselectionne;
-
-
-            if (string.IsNullOrEmpty(nomTagRecherhce))
+        // Inline modification du nom via transaction
+        private void DgvTags_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            // Si checkbox, actualise les boutons
+            if (e.ColumnIndex == dgvTags.Columns["colSelect"].Index)
             {
-                labelResultat.Text = "Veuillez entrer ou selectionne un tag";
+                UpdateDeleteButtons();
                 return;
             }
-            tagTrouve = TagImg.GetTagDictionary().Values.FirstOrDefault(tag => tag.NomTag.Equals(nomTagRecherhce, StringComparison.OrdinalIgnoreCase));
-
-            if(tagTrouve != null)
+            // Si nom modifié
+            if (e.ColumnIndex == dgvTags.Columns[1].Index) // colonne Nom
             {
-                labelResultat.Text = $"Tag trouvé : {tagTrouve.NomTag}";
-            }else
-            {
-                labelResultat.Text = "Aucun tag trouvé.";
-                rechercheBox.Text = "";
-                comboBoxTag.SelectedIndex = -1;
-                tagTrouve = null;
-            }
+                var row = dgvTags.Rows[e.RowIndex];
+                int id = (int)row.Cells[0].Value;
+                string nouveauNom = row.Cells[1].Value.ToString();
+                var tag = TagImg.GetTagDictionary()[id];
+                tag.NomTag = nouveauNom;
 
-        }
-        // Button pour la suppression d'un tag
-        public void ButtonSuppresion(object sender, EventArgs e)
-        {
-            
-            if(tagTrouve == null)
-            {
-                string tagselectionne = comboBoxTag.SelectedItem != null ? comboBoxTag.SelectedItem.ToString() : "";
-
-                if (!string.IsNullOrEmpty(tagselectionne))
+                var db = DataBase.GetInstance();
+                using var transaction = db.BeginTransaction();
+                try
                 {
-                    tagTrouve = TagImg.GetTagDictionary().Values.FirstOrDefault(tag => tag.NomTag.Equals(tagselectionne, StringComparison.OrdinalIgnoreCase));
+                    new DAO_Tag().Update(tag, transaction);
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    MessageBox.Show($"Erreur mise à jour : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-            
-            if (tagTrouve == null) // Vérifie si un tag a été trouvé
-            {
-                MessageBox.Show("Avant de pouvoir supprimer, vous devez écrire le tag que vous souhaitez supprimer ou le  choisir dans la liste.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            if (tagTrouve.IdTag == 0) // Vérifie si le tag trouvé est la racine
-            {
-
-                MessageBox.Show(" Impossible de supprimer le tag racine.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            if (tagTrouve.Enfants.Count == 0) // Verfie si le tag qu'on veut supprimer est un enfant ou un parent qui a des fils
-            {
-                tagTrouve.SupprimerEnfant();
-            }
-            else
-            {
-                tagTrouve.SupprimerParent();
-            }
-
-            MessageBox.Show("Tag supprimé avec succès.", "Succès", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-            rechercheBox.Text = "";// on vide la zone de recherche
-            labelResultat.Text = "";// on vide le label de resultat
-            comboBoxTag.SelectedIndex = -1;
-            tagTrouve = null;// on vide le tag trouvé
-
-
-            this.DialogResult = DialogResult.OK; // on indique que l'opération a été effectuée avec succès
-            this.Close();// on ferme la fenêtre de gestion des tags
-
-
         }
 
-
-        //Fonction qui permet d'ouvrir la fenetre de création d'un tag
-        private void CreationTag(object sender, EventArgs e)
+        private void DgvTags_CurrentCellDirtyStateChanged(object sender, EventArgs e)
         {
-            CreateTag createTagForm = new CreateTag(); // On va creer l'instance de la fenêtre de création de tag
-            var result = createTagForm.ShowDialog(); // Affiche la fenêtre de création de tag 
-
-            if (result == DialogResult.OK) // On verifie si le tag a ete cree avec succes , et alors on rafrachit la liste des tag ds la mainview
-            {
-
-                TagImg.ClearDictionary();
-                TagImg.InitializeDictionary();
-
-                this.DialogResult = DialogResult.OK;
-                this.Close();
-            }
+            if (dgvTags.IsCurrentCellDirty)
+                dgvTags.CommitEdit(DataGridViewDataErrorContexts.Commit);
         }
 
-        private void ModificationTag(object sender, EventArgs e)
+        private void DgvTags_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
+            dgvTags.ClearSelection();
+            UpdateDeleteButtons();
+        }
 
-            // ici on va verifier si le tag a ete selectionne ou saisi dans la zone de recherche
-            if (tagTrouve == null)
+        // Active/Desactive boutons de suppression
+        private void UpdateDeleteButtons()
+        {
+            bool anyChecked = dgvTags.Rows.Cast<DataGridViewRow>()
+                .Any(r => Convert.ToBoolean(r.Cells["colSelect"].Value));
+            btnSupprimerSelection.Enabled = anyChecked;
+            btnSupprimerTag.Enabled = anyChecked;
+        }
+
+        // Suppression multiple avec confirmation
+        private void BtnSupprimerTag_Click(object sender, EventArgs e)
+        {
+            var selectedRows = dgvTags.Rows.Cast<DataGridViewRow>()
+                .Where(r => Convert.ToBoolean(r.Cells["colSelect"].Value))
+                .ToList();
+            if (!selectedRows.Any()) return;
+
+            var names = selectedRows.Select(r => r.Cells[1].Value.ToString()).ToList();
+            string message = "Êtes-vous sûr de vouloir supprimer les tags suivants ?\n" + string.Join("\n", names);
+            if (MessageBox.Show(message, "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
+                return;
+
+            var db = DataBase.GetInstance();
+            using var transaction = db.BeginTransaction();
+            try
             {
-                string tagselectionne = comboBoxTag.SelectedItem != null ? comboBoxTag.SelectedItem.ToString() : "";
-
-                if (!string.IsNullOrEmpty(tagselectionne))
+                foreach (var row in selectedRows)
                 {
-                    tagTrouve = TagImg.GetTagDictionary().Values.FirstOrDefault(tag => tag.NomTag.Equals(tagselectionne, StringComparison.OrdinalIgnoreCase));
+                    int id = (int)row.Cells[0].Value;
+                    var tag = TagImg.GetTagDictionary()[id];
+                    if (tag.IdTag != 0)
+                        tag.SupprimerEnfant();
                 }
+                transaction.Commit();
             }
-
-            if (tagTrouve == null)
+            catch
             {
-                MessageBox.Show("Avant de pouvoir modifier, vous devez écrire le tag que vous souhaitez supprimer ou le  choisir dans la liste.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                transaction.Rollback();
             }
 
-            if (tagTrouve.IdTag == 0) // Vérifie si le tag trouvé est la racine
+            TagImg.ClearDictionary();
+            TagImg.InitializeDictionary();
+            LoadTags(txtRecherche.Text.Trim());
+        }
+
+        private void BtnSupprimerSelection_Click(object sender, EventArgs e)
+        {
+            // Décoche toutes les cases sélectionnées
+            foreach (DataGridViewRow row in dgvTags.Rows)
             {
-
-                MessageBox.Show(" Impossible de modfifier le tag racine.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                row.Cells["colSelect"].Value = false;
             }
+            dgvTags.Refresh();
+            UpdateDeleteButtons();
+        }
 
-            ModificationTag modificationTagForm = new ModificationTag(tagTrouve); // On va creer l'instance de la fenêtre de création de tag
-
-            var result = modificationTagForm.ShowDialog(); // Ici on va afficheer  la fenêtre de création de tag
-
-            if (result == DialogResult.OK)
+        // Création via fenêtre externe
+        private void BtnCreer_Click(object sender, EventArgs e)
+        {
+            using var form = new CreateTag();
+            if (form.ShowDialog() == DialogResult.OK)
             {
                 TagImg.ClearDictionary();
                 TagImg.InitializeDictionary();
+                LoadTags(txtRecherche.Text.Trim());
+            }
+        }
 
-                this.DialogResult = DialogResult.OK;
-                this.Close();
+        // Modification via fenêtre externe
+        private void BtnModifier_Click(object sender, EventArgs e)
+        {
+            var checkedRows = dgvTags.Rows.Cast<DataGridViewRow>()
+                .Where(r => Convert.ToBoolean(r.Cells["colSelect"].Value))
+                .ToList();
+            if (checkedRows.Count != 1)
+            {
+                MessageBox.Show("Sélectionnez exactement un tag à modifier.", "Attention", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            int id = (int)checkedRows[0].Cells["IdTag"].Value;
+            var tag = TagImg.GetTagDictionary()[id];
+            using var form = new ModificationTag(tag);
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                TagImg.ClearDictionary();
+                TagImg.InitializeDictionary();
+                LoadTags(txtRecherche.Text.Trim());
             }
         }
     }
