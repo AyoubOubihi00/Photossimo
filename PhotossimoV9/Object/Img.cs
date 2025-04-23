@@ -45,7 +45,21 @@ namespace PhotossimoV9.Object
 
         public string GetCheminImage()
         {
-            return dossierImage + NomImage;
+            // 1) Répertoire où est lancé l'assembly (bin\Debug\net9.0-windows)
+            string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+
+            // 2) Remonter de trois niveaux pour atteindre le dossier racine du projet
+            string projectRoot = Path.GetFullPath(Path.Combine(baseDir, @"..\..\..\"));
+
+            // 3) Construire le dossier « Ressources/Images » à partir de la racine
+            string imagesFolder = Path.Combine(projectRoot, "Ressources", "Images");
+
+            // 4) (Optionnel) s'assurer que le dossier existe avant d'y écrire
+            if (!Directory.Exists(imagesFolder))
+                Directory.CreateDirectory(imagesFolder);
+
+            // 5) Retourner le chemin complet vers le fichier image
+            return Path.Combine(imagesFolder, NomImage);
         }
 
         public List<int> ListTagToListInt()

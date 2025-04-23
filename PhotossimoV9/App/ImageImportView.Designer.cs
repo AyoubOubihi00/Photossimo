@@ -28,139 +28,204 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.buttonBrowse = new System.Windows.Forms.Button();
-            this.buttonCancel = new System.Windows.Forms.Button();
-            this.buttonTagSelection = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            this.tableLayoutPanel1.SuspendLayout();
-            this.SuspendLayout();
+            buttonBrowse = new Button();
+            buttonCancel = new Button();
+            buttonValiderImport = new Button();
+            buttonAjouterTag = new Button();
+            buttonSupprimerTag = new Button();
+            comboBoxTag = new ComboBox();
+            listBoxTagsSelectionnes = new ListBox();
+            label1 = new Label();
+            label2 = new Label();
+            pictureBox1 = new PictureBox();
+            tableLayoutPanel1 = new TableLayoutPanel();
+            panelDroit = new TableLayoutPanel();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            tableLayoutPanel1.SuspendLayout();
+            panelDroit.SuspendLayout();
+            SuspendLayout();
             // 
             // buttonBrowse
             // 
-            this.buttonBrowse.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.buttonBrowse.Location = new System.Drawing.Point(30, 132);
-            this.buttonBrowse.Margin = new System.Windows.Forms.Padding(30, 3, 30, 3);
-            this.buttonBrowse.Name = "buttonBrowse";
-            this.buttonBrowse.Size = new System.Drawing.Size(191, 37);
-            this.buttonBrowse.TabIndex = 0;
-            this.buttonBrowse.Text = "Parcourir";
-            this.buttonBrowse.UseVisualStyleBackColor = true;
-            this.buttonBrowse.Click += new System.EventHandler(this.buttonBrowse_Click);
+            buttonBrowse.Dock = DockStyle.Fill;
+            buttonBrowse.Location = new Point(803, 103);
+            buttonBrowse.Name = "buttonBrowse";
+            buttonBrowse.Size = new Size(216, 34);
+            buttonBrowse.TabIndex = 2;
+            buttonBrowse.Text = "Parcourir";
+            buttonBrowse.Click += buttonBrowse_Click;
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.buttonCancel.Location = new System.Drawing.Point(30, 355);
-            this.buttonCancel.Margin = new System.Windows.Forms.Padding(30, 10, 30, 10);
-            this.buttonCancel.Name = "buttonCancel";
-            this.buttonCancel.Size = new System.Drawing.Size(191, 68);
-            this.buttonCancel.TabIndex = 1;
-            this.buttonCancel.Text = "Annuler";
-            this.buttonCancel.UseVisualStyleBackColor = true;
-            this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
+            buttonCancel.Dock = DockStyle.Fill;
+            buttonCancel.Location = new Point(3, 856);
+            buttonCancel.Name = "buttonCancel";
+            buttonCancel.Size = new Size(794, 54);
+            buttonCancel.TabIndex = 5;
+            buttonCancel.Text = "Annuler";
+            buttonCancel.Click += buttonCancel_Click;
             // 
-            // buttonTagSelection
+            // buttonValiderImport
             // 
-            this.buttonTagSelection.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.buttonTagSelection.Location = new System.Drawing.Point(281, 355);
-            this.buttonTagSelection.Margin = new System.Windows.Forms.Padding(30, 10, 30, 10);
-            this.buttonTagSelection.Name = "buttonTagSelection";
-            this.buttonTagSelection.Size = new System.Drawing.Size(191, 68);
-            this.buttonTagSelection.TabIndex = 2;
-            this.buttonTagSelection.Text = "Séléction des Tags";
-            this.buttonTagSelection.UseVisualStyleBackColor = true;
-            this.buttonTagSelection.Click += new System.EventHandler(this.buttonTagSelection_Click);
+            buttonValiderImport.Dock = DockStyle.Fill;
+            buttonValiderImport.Location = new Point(803, 856);
+            buttonValiderImport.Name = "buttonValiderImport";
+            buttonValiderImport.Size = new Size(216, 54);
+            buttonValiderImport.TabIndex = 6;
+            buttonValiderImport.Text = "Valider Import";
+            buttonValiderImport.Click += buttonValiderImport_Click;
+            // 
+            // buttonAjouterTag
+            // 
+            buttonAjouterTag.Dock = DockStyle.Top;
+            buttonAjouterTag.Location = new Point(3, 40);
+            buttonAjouterTag.Margin = new Padding(3, 10, 3, 20);
+            buttonAjouterTag.MaximumSize = new Size(194, 30);
+            buttonAjouterTag.MinimumSize = new Size(194, 30);
+            buttonAjouterTag.Name = "buttonAjouterTag";
+            buttonAjouterTag.Size = new Size(194, 30);
+            buttonAjouterTag.TabIndex = 1;
+            buttonAjouterTag.Text = "Ajouter Tag";
+            buttonAjouterTag.Click += buttonAjouterTag_Click;
+            // 
+            // buttonSupprimerTag
+            // 
+            buttonSupprimerTag.Dock = DockStyle.Top;
+            buttonSupprimerTag.Location = new Point(3, 73);
+            buttonSupprimerTag.Margin = new Padding(3, 10, 3, 20);
+            buttonSupprimerTag.MaximumSize = new Size(194, 30);
+            buttonSupprimerTag.MinimumSize = new Size(194, 30);
+            buttonSupprimerTag.Name = "buttonSupprimerTag";
+            buttonSupprimerTag.Size = new Size(194, 30);
+            buttonSupprimerTag.TabIndex = 2;
+            buttonSupprimerTag.Text = "Supprimer Tag";
+            buttonSupprimerTag.Click += buttonSupprimerTag_Click;
+            // 
+            // comboBoxTag
+            // 
+            comboBoxTag.Dock = DockStyle.Top;
+            comboBoxTag.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBoxTag.Location = new Point(3, 3);
+            comboBoxTag.Name = "comboBoxTag";
+            comboBoxTag.Size = new Size(194, 28);
+            comboBoxTag.TabIndex = 0;
+            // 
+            // listBoxTagsSelectionnes
+            // 
+            listBoxTagsSelectionnes.Dock = DockStyle.Fill;
+            listBoxTagsSelectionnes.Location = new Point(3, 110);
+            listBoxTagsSelectionnes.Margin = new Padding(3, 20, 3, 20);
+            listBoxTagsSelectionnes.MaximumSize = new Size(194, 400);
+            listBoxTagsSelectionnes.MinimumSize = new Size(194, 400);
+            listBoxTagsSelectionnes.Name = "listBoxTagsSelectionnes";
+            listBoxTagsSelectionnes.SelectionMode = SelectionMode.MultiExtended;
+            listBoxTagsSelectionnes.Size = new Size(194, 400);
+            listBoxTagsSelectionnes.TabIndex = 3;
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.tableLayoutPanel1.SetColumnSpan(this.label1, 2);
-            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label1.Location = new System.Drawing.Point(3, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(496, 86);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "Importer une image";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            tableLayoutPanel1.SetColumnSpan(label1, 2);
+            label1.Dock = DockStyle.Fill;
+            label1.Font = new Font("Segoe UI", 24F);
+            label1.Location = new Point(3, 0);
+            label1.Name = "label1";
+            label1.Size = new Size(1016, 60);
+            label1.TabIndex = 0;
+            label1.Text = "Importer une image";
+            label1.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.tableLayoutPanel1.SetColumnSpan(this.label2, 2);
-            this.label2.Location = new System.Drawing.Point(30, 96);
-            this.label2.Margin = new System.Windows.Forms.Padding(30, 10, 10, 10);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(314, 20);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "Sélection de l\'image à importer (Format JPEG)";
+            tableLayoutPanel1.SetColumnSpan(label2, 2);
+            label2.Dock = DockStyle.Fill;
+            label2.Location = new Point(3, 60);
+            label2.Name = "label2";
+            label2.Size = new Size(1016, 40);
+            label2.TabIndex = 1;
+            label2.Text = "Sélection de l'image à importer (Format JPEG)";
             // 
             // pictureBox1
             // 
-            this.tableLayoutPanel1.SetColumnSpan(this.pictureBox1, 2);
-            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox1.Location = new System.Drawing.Point(80, 175);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(80, 3, 80, 3);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(342, 167);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 5;
-            this.pictureBox1.TabStop = false;
+            pictureBox1.Dock = DockStyle.Fill;
+            pictureBox1.Location = new Point(3, 143);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(794, 678);
+            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBox1.TabIndex = 3;
+            pictureBox1.TabStop = false;
             // 
             // tableLayoutPanel1
             // 
-            this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.buttonTagSelection, 1, 4);
-            this.tableLayoutPanel1.Controls.Add(this.buttonCancel, 0, 4);
-            this.tableLayoutPanel1.Controls.Add(this.label2, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.buttonBrowse, 0, 2);
-            this.tableLayoutPanel1.Controls.Add(this.pictureBox1, 0, 3);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 5;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(502, 433);
-            this.tableLayoutPanel1.TabIndex = 6;
+            tableLayoutPanel1.ColumnCount = 2;
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 78.2778854F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 21.7221127F));
+            tableLayoutPanel1.Controls.Add(label1, 0, 0);
+            tableLayoutPanel1.Controls.Add(label2, 0, 1);
+            tableLayoutPanel1.Controls.Add(buttonBrowse, 1, 2);
+            tableLayoutPanel1.Controls.Add(pictureBox1, 0, 3);
+            tableLayoutPanel1.Controls.Add(panelDroit, 1, 3);
+            tableLayoutPanel1.Controls.Add(buttonCancel, 0, 5);
+            tableLayoutPanel1.Controls.Add(buttonValiderImport, 1, 5);
+            tableLayoutPanel1.Dock = DockStyle.Fill;
+            tableLayoutPanel1.Location = new Point(0, 0);
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.RowCount = 6;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 60F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 29F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 60F));
+            tableLayoutPanel1.Size = new Size(1022, 913);
+            tableLayoutPanel1.TabIndex = 0;
+            // 
+            // panelDroit
+            // 
+            panelDroit.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            panelDroit.Controls.Add(comboBoxTag, 0, 0);
+            panelDroit.Controls.Add(buttonAjouterTag, 0, 1);
+            panelDroit.Controls.Add(buttonSupprimerTag, 0, 2);
+            panelDroit.Controls.Add(listBoxTagsSelectionnes, 0, 3);
+            panelDroit.Location = new Point(803, 143);
+            panelDroit.Name = "panelDroit";
+            panelDroit.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+            panelDroit.RowStyles.Add(new RowStyle(SizeType.Absolute, 33F));
+            panelDroit.RowStyles.Add(new RowStyle(SizeType.Absolute, 27F));
+            panelDroit.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            panelDroit.Size = new Size(200, 555);
+            panelDroit.TabIndex = 4;
             // 
             // ImageImportView
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(502, 433);
-            this.Controls.Add(this.tableLayoutPanel1);
-            this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(520, 480);
-            this.MinimumSize = new System.Drawing.Size(520, 480);
-            this.Name = "ImageImportView";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.WindowsDefaultBounds;
-            this.Text = "Importer une image";
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel1.PerformLayout();
-            this.ResumeLayout(false);
-
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(1022, 913);
+            Controls.Add(tableLayoutPanel1);
+            MaximizeBox = false;
+            MaximumSize = new Size(1040, 960);
+            MinimumSize = new Size(1040, 960);
+            Name = "ImageImportView";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Importer une image";
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            tableLayoutPanel1.ResumeLayout(false);
+            panelDroit.ResumeLayout(false);
+            ResumeLayout(false);
         }
 
         #endregion
 
         private Button buttonBrowse;
         private Button buttonCancel;
-        private Button buttonTagSelection;
+        private Button buttonValiderImport;
+        private Button buttonAjouterTag;
+        private Button buttonSupprimerTag;
+        private ComboBox comboBoxTag;
+        private ListBox listBoxTagsSelectionnes;
         private Label label1;
         private Label label2;
-        private TableLayoutPanel tableLayoutPanel1;
         private PictureBox pictureBox1;
+        private TableLayoutPanel tableLayoutPanel1;
+        private TableLayoutPanel panelDroit;
     }
 }

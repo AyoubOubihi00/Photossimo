@@ -63,9 +63,8 @@
             labelResultat.AutoSize = true;
             labelResultat.Location = new Point(541, 100);
             labelResultat.Name = "labelResultat";
-            labelResultat.Size = new Size(95, 20);
+            labelResultat.Size = new Size(0, 20);
             labelResultat.TabIndex = 2;
-            labelResultat.Text = "labelResultat";
             // 
             // button2
             // 
