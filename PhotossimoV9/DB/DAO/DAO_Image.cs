@@ -60,43 +60,55 @@ namespace PhotossimoV9.DB.DAO
 
         public override List<Img> FindAll()
         {
-            MySqlConnection connection = DataBase.GetInstance();
-            MySqlCommand command = connection.CreateCommand();
-            command.Connection = connection;
+            var connection = DataBase.GetInstance();
 
-            List<Img> listImg = [];
+            // 1) Charger d'abord le dictionnaire des tags en mémoire, AVANT d'ouvrir le reader des images
+            var dictTags = TagImg.GetTagDictionary();  // n'ouvre qu'un reader, et le ferme
+
+            var listImg = new List<Img>();
 
             try
             {
-                command.CommandText = "SELECT * FROM images";
+                using var cmd = connection.CreateCommand();
+                cmd.CommandText = "SELECT * FROM images";
 
-                MySqlDataReader msdr = command.ExecuteReader();
-                if (msdr.HasRows)
-                    while (msdr.Read())
-                    {
-                        if (!Int32.TryParse(msdr["id_image"].ToString(), out int idImage)) throw new ArgumentNullException("IdImage invalide");
-                        if (msdr["nom_image"] is not string nomImage) throw new ArgumentNullException("NomImage invalide");
-                        if (!DateTime.TryParse(msdr["date_import"].ToString(), out DateTime dateImport)) throw new ArgumentNullException("dateimport invalide");
-                        if (msdr["tags"] is not string stringTags) throw new ArgumentNullException("tags invalide");
+                // 2) Ouvrir le reader des images
+                using var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    // Lecture des champs
+                    int idImage = reader.GetInt32("id_image");
+                    string nomImage = reader.GetString("nom_image");
+                    DateTime dateImport = reader.GetDateTime("date_import");
+                    string stringTags = reader.GetString("tags");
 
-                        List<int> intTags = Utils.Utils.ParseNumbers(stringTags);
-                        // On récupére les Tags de l'image dans le dictionnaire de Tag (évite de créer des doublons du même Tag)
-                        List<TagImg> tagList = TagImg.GetTagDictionary().Where(x => intTags.Contains(x.Key)).Select(x => x.Value).ToList();
+                    // Transformation de la chaîne de tags en liste d'int
+                    var intTags = Utils.Utils.ParseNumbers(stringTags);
 
-                        Img newImg = new(idImage, nomImage, dateImport, tagList);
-                        // On complète la liste de Tags avec tous les ancêtres des Tags déjà présents
-                        foreach (TagImg tag in newImg.Tags)
-                            newImg.AddTagsAncestors(tag);
-                        listImg.Add(newImg);
-                    }
-                msdr.Close();
+                    // 3) Récupérer les TagImg depuis le dict chargé
+                    var tagList = intTags
+                        .Where(id => dictTags.ContainsKey(id))
+                        .Select(id => dictTags[id])
+                        .ToList();
+
+                    // Construction de l'objet Img
+                    var img = new Img(idImage, nomImage, dateImport, tagList);
+
+                    // Compléter avec les ancêtres
+                    foreach (var tag in img.Tags.ToList())
+                        img.AddTagsAncestors(tag);
+
+                    listImg.Add(img);
+                }
             }
             catch (Exception e)
             {
                 Console.WriteLine("Erreur : " + e.Message);
             }
+
             return listImg;
         }
+
 
         public override void Update(Img img, MySqlTransaction transaction)
         {
