@@ -38,14 +38,13 @@
             buttonEdit = new Button();
             tableLayoutPanel3 = new TableLayoutPanel();
             textBox1 = new TextBox();
-            dataGridView1 = new DataGridView();
+            flowLayoutImages = new FlowLayoutPanel();
             tableLayoutPanel4 = new TableLayoutPanel();
             tagTreeView = new TreeView();
             label1 = new Label();
             tableLayoutPanel1.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             tableLayoutPanel3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             tableLayoutPanel4.SuspendLayout();
             SuspendLayout();
             // 
@@ -67,9 +66,9 @@
             // tableLayoutPanel2
             // 
             tableLayoutPanel2.ColumnCount = 3;
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 66F));
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 17F));
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 17F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 67.35016F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.2460575F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.2460575F));
             tableLayoutPanel2.Controls.Add(buttonDelete, 2, 0);
             tableLayoutPanel2.Controls.Add(label3, 0, 0);
             tableLayoutPanel2.Controls.Add(label2, 0, 2);
@@ -77,28 +76,32 @@
             tableLayoutPanel2.Controls.Add(buttonCreateTag, 2, 1);
             tableLayoutPanel2.Controls.Add(buttonEdit, 1, 1);
             tableLayoutPanel2.Controls.Add(tableLayoutPanel3, 0, 1);
-            tableLayoutPanel2.Controls.Add(dataGridView1, 0, 3);
+            tableLayoutPanel2.Controls.Add(flowLayoutImages, 0, 3);
             tableLayoutPanel2.Dock = DockStyle.Fill;
             tableLayoutPanel2.Location = new Point(163, 3);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 4;
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 18F));
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 18F));
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 14.8648653F));
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 20.72072F));
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 9F));
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 55F));
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel2.Size = new Size(634, 444);
             tableLayoutPanel2.TabIndex = 1;
             // 
             // buttonDelete
             // 
-            buttonDelete.AutoSize = true;
             buttonDelete.Dock = DockStyle.Fill;
-            buttonDelete.Location = new Point(535, 10);
+            buttonDelete.Location = new Point(540, 10);
             buttonDelete.Margin = new Padding(10);
             buttonDelete.Name = "buttonDelete";
-            buttonDelete.Size = new Size(89, 59);
+            buttonDelete.Size = new Size(84, 46);
             buttonDelete.TabIndex = 5;
             buttonDelete.Text = "Supprimer Séléction";
+            buttonDelete.UseCompatibleTextRendering = true;
             buttonDelete.UseVisualStyleBackColor = true;
             // 
             // label3
@@ -106,9 +109,9 @@
             label3.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 24F);
-            label3.Location = new Point(94, 0);
+            label3.Location = new Point(99, 0);
             label3.Name = "label3";
-            label3.Size = new Size(229, 79);
+            label3.Size = new Size(229, 66);
             label3.TabIndex = 4;
             label3.Text = "Photossimo";
             label3.TextAlign = ContentAlignment.MiddleCenter;
@@ -124,14 +127,14 @@
             // 
             // buttonImport
             // 
-            buttonImport.AutoSize = true;
             buttonImport.Dock = DockStyle.Fill;
-            buttonImport.Location = new Point(428, 10);
+            buttonImport.Location = new Point(437, 10);
             buttonImport.Margin = new Padding(10);
             buttonImport.Name = "buttonImport";
-            buttonImport.Size = new Size(87, 59);
+            buttonImport.Size = new Size(83, 46);
             buttonImport.TabIndex = 0;
             buttonImport.Text = "Importer Image";
+            buttonImport.UseCompatibleTextRendering = true;
             buttonImport.UseVisualStyleBackColor = true;
             buttonImport.Click += buttonImport_Click;
             // 
@@ -139,10 +142,10 @@
             // 
             buttonCreateTag.AutoSize = true;
             buttonCreateTag.Dock = DockStyle.Fill;
-            buttonCreateTag.Location = new Point(535, 89);
+            buttonCreateTag.Location = new Point(540, 76);
             buttonCreateTag.Margin = new Padding(10);
             buttonCreateTag.Name = "buttonCreateTag";
-            buttonCreateTag.Size = new Size(89, 59);
+            buttonCreateTag.Size = new Size(84, 72);
             buttonCreateTag.TabIndex = 7;
             buttonCreateTag.Text = "Gestion Tag";
             buttonCreateTag.UseVisualStyleBackColor = true;
@@ -152,10 +155,10 @@
             // 
             buttonEdit.AutoSize = true;
             buttonEdit.Dock = DockStyle.Fill;
-            buttonEdit.Location = new Point(428, 89);
+            buttonEdit.Location = new Point(437, 76);
             buttonEdit.Margin = new Padding(10);
             buttonEdit.Name = "buttonEdit";
-            buttonEdit.Size = new Size(87, 59);
+            buttonEdit.Size = new Size(83, 72);
             buttonEdit.TabIndex = 6;
             buttonEdit.Text = "Modifier Séléction";
             buttonEdit.UseVisualStyleBackColor = true;
@@ -166,12 +169,12 @@
             tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             tableLayoutPanel3.Controls.Add(textBox1, 0, 0);
             tableLayoutPanel3.Dock = DockStyle.Fill;
-            tableLayoutPanel3.Location = new Point(3, 82);
+            tableLayoutPanel3.Location = new Point(3, 69);
             tableLayoutPanel3.Name = "tableLayoutPanel3";
             tableLayoutPanel3.RowCount = 2;
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 54.54546F));
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 45.45454F));
-            tableLayoutPanel3.Size = new Size(412, 73);
+            tableLayoutPanel3.Size = new Size(421, 86);
             tableLayoutPanel3.TabIndex = 8;
             // 
             // textBox1
@@ -180,23 +183,16 @@
             textBox1.Location = new Point(10, 4);
             textBox1.Margin = new Padding(10, 4, 10, 4);
             textBox1.Name = "textBox1";
-            textBox1.Size = new Size(392, 27);
+            textBox1.Size = new Size(401, 27);
             textBox1.TabIndex = 0;
             // 
-            // dataGridView1
+            // flowLayoutImages
             // 
-            dataGridView1.AllowUserToAddRows = false;
-            dataGridView1.AllowUserToDeleteRows = false;
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            tableLayoutPanel2.SetColumnSpan(dataGridView1, 3);
-            dataGridView1.Dock = DockStyle.Fill;
-            dataGridView1.Location = new Point(10, 207);
-            dataGridView1.Margin = new Padding(10);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.ReadOnly = true;
-            dataGridView1.RowHeadersWidth = 51;
-            dataGridView1.Size = new Size(614, 227);
-            dataGridView1.TabIndex = 9;
+            flowLayoutImages.AutoScroll = true;
+            flowLayoutImages.Location = new Point(3, 201);
+            flowLayoutImages.Name = "flowLayoutImages";
+            flowLayoutImages.Size = new Size(421, 240);
+            flowLayoutImages.TabIndex = 9;
             // 
             // tableLayoutPanel4
             // 
@@ -246,7 +242,6 @@
             tableLayoutPanel2.PerformLayout();
             tableLayoutPanel3.ResumeLayout(false);
             tableLayoutPanel3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             tableLayoutPanel4.ResumeLayout(false);
             tableLayoutPanel4.PerformLayout();
             ResumeLayout(false);
@@ -264,9 +259,9 @@
         private Button buttonEdit;
         private TableLayoutPanel tableLayoutPanel3;
         private TextBox textBox1;
-        private DataGridView dataGridView1;
         private TableLayoutPanel tableLayoutPanel4;
         private TreeView tagTreeView;
         private Label label1;
+        private FlowLayoutPanel flowLayoutImages;
     }
 }
