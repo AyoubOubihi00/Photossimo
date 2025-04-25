@@ -8,9 +8,8 @@ using System.IO;
 
 namespace PhotossimoV9.Object
 {
-    class Img
+    public class Img
     {
-        private const string dossierImage = "../Ressources/Images/";
         private List<TagImg> _tags;
         public int IdImage { get; set; }
         public string NomImage { get; set; } 
@@ -24,7 +23,7 @@ namespace PhotossimoV9.Object
             }
         }
 
-        public Image? Image { get; set; }
+        public Image Image { get; set; }
 
         public Img(int idImage, string nomImage, DateTime dateImport, List<TagImg> Tags)
         {
@@ -33,12 +32,14 @@ namespace PhotossimoV9.Object
             DateImport = dateImport;
             this.Tags = Tags ?? []; // Si Tags est null, on initialise une liste vide
 
-            /*try { 
+            try { 
                     Image = Image.FromFile(GetCheminImage());
             }
             catch (FileNotFoundException e) {
+                // Image par défaut (pour ne pas que Image soit null)
+                Image = Image.FromFile(Path.Combine(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\")), "Ressources", "Images", "NotFound.jpg"));
                 Console.WriteLine(e.Message);
-            }*/
+            }
             foreach(TagImg tag in this.Tags.ToList())
                 AddTagsAncestors(tag);
         }
@@ -79,8 +80,8 @@ namespace PhotossimoV9.Object
                 if(!Tags.Contains(tempTag) && !ancestorsToAdd.Contains(tempTag))
                 {
                     ancestorsToAdd.Add(tempTag);
-                    tempTag = tempTag.Parent;
                 }
+                tempTag = tempTag.Parent;
             }
             Tags.AddRange(ancestorsToAdd);
         }

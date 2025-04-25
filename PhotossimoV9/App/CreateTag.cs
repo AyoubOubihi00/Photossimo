@@ -68,8 +68,9 @@ namespace Photossimo
                 TagImg nouveauTag = TagImg.GetOrCreate(0, nomTag, parentTag); // On cree un nouveau tag 
 
                 //on l'ajoute à la base de données
-                DAO_Tag daoTag = new DAO_Tag();
-                daoTag.Insert(nomTag, parentTag?.IdTag);
+                MySqlTransaction transaction = DataBase.GetInstance().BeginTransaction();
+                new DAO_Tag().Create(nouveauTag, transaction);
+                transaction.Commit();
 
                 MessageBox.Show($"Tag '{nomTag}' créé avec succès.", "Succès", MessageBoxButtons.OK, MessageBoxIcon.Information);
 

@@ -26,8 +26,8 @@ namespace PhotossimoV9.DB.DAO
                     "nom_tag, id_parent)" +
                     "VALUES(@nom_tag, @id_parent);";
                 command.Parameters.AddWithValue("@nom_tag", tag.IdTag);
-                if (tag.Parent is not null) command.Parameters.AddWithValue("@chemin_image", tag.Parent.IdTag);
-                else throw new ArgumentNullException("Le parent est null lors de la création dans la BDD");
+                if (tag.Parent is not null) command.Parameters.AddWithValue("@id_parent", tag.Parent.IdTag);
+                else command.Parameters.AddWithValue("@id_parent", DBNull.Value);
                 command.ExecuteNonQuery();
 
                 //On récupére l'ID du tag créé par la bdd
@@ -113,22 +113,6 @@ namespace PhotossimoV9.DB.DAO
             {
                 Console.WriteLine("Erreur : " + e.Message);
             }
-        }
-
-        //Fonction pour insérer un tag dans la base de données avec le nom et le parent, recupere a partir de la fenetre pour la creation de tag
-        public void Insert(string nomTag,int? idParent)
-        {
-            MySqlConnection connection = DataBase.GetInstance();
-            MySqlCommand command = connection.CreateCommand();
-            command.CommandText = "INSERT INTO tags (nom_tag, id_parent) VALUES (@nom_tag, @id_parent)";
-            command.Parameters.AddWithValue("@nom_tag", nomTag);
-
-            if (idParent.HasValue)
-                command.Parameters.AddWithValue("@id_parent", idParent.Value);
-            else
-                command.Parameters.AddWithValue("@id_parent", DBNull.Value);
-
-            command.ExecuteNonQuery();
         }
     }
 }

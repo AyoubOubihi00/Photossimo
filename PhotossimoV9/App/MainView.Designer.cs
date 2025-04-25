@@ -38,7 +38,7 @@
             buttonEdit = new Button();
             tableLayoutPanel3 = new TableLayoutPanel();
             textBox1 = new TextBox();
-            flowLayoutImages = new FlowLayoutPanel();
+            listViewImage = new ListView();
             tableLayoutPanel4 = new TableLayoutPanel();
             tagTreeView = new TreeView();
             label1 = new Label();
@@ -76,7 +76,7 @@
             tableLayoutPanel2.Controls.Add(buttonCreateTag, 2, 1);
             tableLayoutPanel2.Controls.Add(buttonEdit, 1, 1);
             tableLayoutPanel2.Controls.Add(tableLayoutPanel3, 0, 1);
-            tableLayoutPanel2.Controls.Add(flowLayoutImages, 0, 3);
+            tableLayoutPanel2.Controls.Add(listViewImage, 0, 3);
             tableLayoutPanel2.Dock = DockStyle.Fill;
             tableLayoutPanel2.Location = new Point(163, 3);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -186,13 +186,15 @@
             textBox1.Size = new Size(401, 27);
             textBox1.TabIndex = 0;
             // 
-            // flowLayoutImages
+            // listViewImage
             // 
-            flowLayoutImages.AutoScroll = true;
-            flowLayoutImages.Location = new Point(3, 201);
-            flowLayoutImages.Name = "flowLayoutImages";
-            flowLayoutImages.Size = new Size(421, 240);
-            flowLayoutImages.TabIndex = 9;
+            tableLayoutPanel2.SetColumnSpan(listViewImage, 3);
+            listViewImage.Dock = DockStyle.Fill;
+            listViewImage.Location = new Point(3, 201);
+            listViewImage.Name = "listViewImage";
+            listViewImage.Size = new Size(628, 240);
+            listViewImage.TabIndex = 9;
+            listViewImage.UseCompatibleStateImageBehavior = false;
             // 
             // tableLayoutPanel4
             // 
@@ -262,6 +264,6 @@
         private TableLayoutPanel tableLayoutPanel4;
         private TreeView tagTreeView;
         private Label label1;
-        private FlowLayoutPanel flowLayoutImages;
+        private ListView listViewImage;
     }
 }

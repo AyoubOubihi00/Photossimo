@@ -8,15 +8,21 @@ namespace Photossimo
 {
     public partial class MainView : Form
     {
-        private List<Img> listImg = [];
+        public List<Img> listImg = [];
         public MainView()
         {
             InitializeComponent();
         }
 
+        public void AddNewImage(Img newImage)
+        {
+            listImg.Add(newImage);
+            AfficherImages(listImg);
+        }
+
         private void buttonImport_Click(object sender, EventArgs e)
         {
-            ImageImportView imgImportView = new ImageImportView();
+            ImageImportView imgImportView = new ImageImportView(this);
             imgImportView.ShowDialog();
         }
 
@@ -26,12 +32,7 @@ namespace Photossimo
             TagImg.InitializeDictionary();
             listImg = new DAO_Image().FindAll();
             LoadTagTreeView();
-            AfficherImages();
-        }
-
-        private void MainView_Resize(object sender, EventArgs e)
-        {
-            AfficherImages();
+            AfficherImages(listImg);
         }
 
         private void LoadTagTreeView()
@@ -72,70 +73,28 @@ namespace Photossimo
 
         }
 
-        private void AfficherImages()
+        private void AfficherImages(List<Img> images)
         {
-            string dossierImages = Path.Combine(Application.StartupPath, @"..\..\..\Ressources\Images");
+            listViewImage.Clear();
+            int imageWidth = 100;
+            int imageHeight = 100;
 
-            if (!Directory.Exists(dossierImages))
+            ImageList imageList = new();
+            imageList.ImageSize = new Size(imageWidth, imageHeight);
+            listViewImage.LargeImageList = imageList;
+
+            int index = 0;
+            foreach(Img img in images)
             {
-                MessageBox.Show("Le dossier d'images n'existe pas.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                imageList.Images.Add(img.Image);
+
+                ListViewItem item = new(img.NomImage, index);
+                item.Tag = img; // Fait le lien avec notre objet Img
+                listViewImage.Items.Add(item);
+
+                index++;
             }
-
-            var fichierJPEG = Directory.GetFiles(dossierImages, "*.jpeg");
-            var fichierJPG = Directory.GetFiles(dossierImages, "*.jpg");
-
-            var fichiers = fichierJPEG.Concat(fichierJPG).ToArray();
-
-            flowLayoutImages.Controls.Clear();
-
-
-            // C'est pour le resize (pas encore termine)
-            int nbcolonne = 4;
-            int espace = 10;
-            int largeurImage = (flowLayoutImages.ClientSize.Width / nbcolonne) - espace;
-
-            foreach (string fichier in fichiers)
-            {
-                System.Drawing.Image image = System.Drawing.Image.FromFile(fichier);
-                PictureBox pb = new PictureBox()
-                {
-
-                    Image = image,
-                    SizeMode = PictureBoxSizeMode.Zoom,
-                    //Dock = DockStyle.Top,
-                    Height = 90,
-                    Width = largeurImage,
-                    Cursor = Cursors.Hand
-                };
-
-                Label label = new Label()
-                {
-                    Text = Path.GetFileName(fichier),
-                    TextAlign = ContentAlignment.MiddleCenter,
-                   // Dock = DockStyle.Bottom,
-                    Width = largeurImage,
-                    Height = 30,
-                    AutoEllipsis = true
-                };
-
-                Panel panel = new Panel()
-                {
-                    Width = largeurImage,
-                    Height = 150,
-                    Margin = new Padding(5)
-                };
-
-                panel.Controls.Add(label);
-
-                panel.Controls.Add(pb);
-
-                flowLayoutImages.Controls.Add(panel);
-
-
-
-            }
-
         }
+
     }
 }

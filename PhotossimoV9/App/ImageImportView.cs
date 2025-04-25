@@ -7,6 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Google.Protobuf.WellKnownTypes;
+using MySql.Data.MySqlClient;
+using PhotossimoV9.DB;
 using PhotossimoV9.DB.DAO;
 using PhotossimoV9.Object;
 
@@ -14,6 +17,7 @@ namespace Photossimo
 {
     public partial class ImageImportView : Form
     {
+        MainView mainView;
         Image imgSelected;
         private string FileImageSelectionne;
         // Partie initialisation des tags dans la fenêtre principale
@@ -29,8 +33,9 @@ namespace Photossimo
         }
 
         // Appelle cette méthode dans ton constructeur après InitializeComponent()
-        public ImageImportView()
+        public ImageImportView(MainView mv)
         {
+            mainView = mv;
             InitializeComponent();
             ChargerTags();
         }
@@ -87,14 +92,19 @@ namespace Photossimo
                     tagsAssocies.Add(tagtrouve);
             }
 
-            Img nouvelleImage = new(0, FileImageSelectionne, DateTime.Now, tagsAssocies);
-            string cheminimage = nouvelleImage.GetCheminImage();
+            Img nouvelleImage = new(-1, FileImageSelectionne, DateTime.Now, tagsAssocies);
+            string cheminImage = nouvelleImage.GetCheminImage();
 
-            Directory.CreateDirectory(Path.GetDirectoryName(cheminimage));
-            imgSelected.Save(cheminimage, System.Drawing.Imaging.ImageFormat.Jpeg);
+            Directory.CreateDirectory(Path.GetDirectoryName(cheminImage));
+            imgSelected.Save(cheminImage, System.Drawing.Imaging.ImageFormat.Jpeg);
 
-            DAO_Image daoImage = new();
-            daoImage.Insert(nouvelleImage);
+            nouvelleImage.Image = Image.FromFile(nouvelleImage.GetCheminImage());
+
+            MySqlTransaction transaction =  DataBase.GetInstance().BeginTransaction();
+            new DAO_Image().Create(nouvelleImage, transaction);
+            transaction.Commit();
+
+            mainView.AddNewImage(nouvelleImage);
 
             MessageBox.Show("Image et tags associés enregistrés avec succès", "Succès", MessageBoxButtons.OK, MessageBoxIcon.Information);
 

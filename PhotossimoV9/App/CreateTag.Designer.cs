@@ -149,7 +149,6 @@
             tableLayoutPanel2.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
-
         }
 
         #endregion
