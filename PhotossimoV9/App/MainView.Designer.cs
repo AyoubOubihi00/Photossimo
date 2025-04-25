@@ -103,6 +103,7 @@
             buttonDelete.Text = "Supprimer Séléction";
             buttonDelete.UseCompatibleTextRendering = true;
             buttonDelete.UseVisualStyleBackColor = true;
+            buttonDelete.Click += buttonDelete_Click;
             // 
             // label3
             // 

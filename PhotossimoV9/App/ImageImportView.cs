@@ -96,7 +96,7 @@ namespace Photossimo
             string cheminImage = nouvelleImage.GetCheminImage();
 
             Directory.CreateDirectory(Path.GetDirectoryName(cheminImage));
-            imgSelected.Save(cheminImage, System.Drawing.Imaging.ImageFormat.Jpeg);
+            if(!File.Exists(cheminImage)) imgSelected.Save(cheminImage, System.Drawing.Imaging.ImageFormat.Jpeg);
 
             nouvelleImage.Image = Image.FromFile(nouvelleImage.GetCheminImage());
 
@@ -104,7 +104,7 @@ namespace Photossimo
             new DAO_Image().Create(nouvelleImage, transaction);
             transaction.Commit();
 
-            mainView.AddNewImage(nouvelleImage);
+            mainView.AddImage(nouvelleImage);
 
             MessageBox.Show("Image et tags associés enregistrés avec succès", "Succès", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
