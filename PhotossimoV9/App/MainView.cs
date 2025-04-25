@@ -27,7 +27,7 @@ namespace Photossimo
         {
             listImg.Remove(image);
             listViewImage.Items.RemoveAt(index);
-            listViewImage.LargeImageList.Images.RemoveAt(index);
+            if(listViewImage.LargeImageList is not null) listViewImage.LargeImageList.Images.RemoveAt(index);
         }
 
         private void buttonImport_Click(object sender, EventArgs e)

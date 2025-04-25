@@ -11,7 +11,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace PhotossimoV9.DB.DAO
 {
-    class DAO_Tag : DAO<Object.TagImg>
+    class DAO_TagImg : DAO<Object.TagImg>
     {
         public override void Create(TagImg tag, MySqlTransaction transaction)
         {
@@ -69,7 +69,7 @@ namespace PhotossimoV9.DB.DAO
 
             try
             {
-                command.CommandText = "SELECT * FROM tags ORDER BY id_parent IS NULL DESC, id_parent ASC";
+                command.CommandText = "SELECT * FROM tags ORDER BY id_parent ASC";
 
                 using (MySqlDataReader msdr = command.ExecuteReader())
                 {
@@ -81,7 +81,7 @@ namespace PhotossimoV9.DB.DAO
                             if (msdr["nom_tag"] is not string nomTag) throw new ArgumentNullException("NomTag invalide");
                             if (!Int32.TryParse(msdr["id_parent"].ToString(), out int idParent)) throw new ArgumentNullException("IdParent invalide");
 
-                            if (!TagImg.GetTagDictionary().TryGetValue(idParent, out TagImg? parent)) throw new ArgumentException("Le parent n'existe pas");
+                            if (!TagImg.GetTagDictionary().TryGetValue(idParent, out TagImg? parent)) throw new ArgumentException("Le parent avec l'id " + idParent + " n'existe pas");
                             TagImg newTag = TagImg.GetOrCreate(idTag, nomTag, parent);
                             listTag.Add(newTag);
                         }

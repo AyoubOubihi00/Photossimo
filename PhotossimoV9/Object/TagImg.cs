@@ -50,7 +50,7 @@ namespace PhotossimoV9.Object
             TagImg root = new(0, "root", null);
             _tagDictionary.Add(root.IdTag, root);
 
-            List<TagImg> tags = new DAO_Tag().FindAll();
+            List<TagImg> tags = new DAO_TagImg().FindAll();
         }
 
         public static Dictionary<int, TagImg> GetTagDictionary()
@@ -71,7 +71,7 @@ namespace PhotossimoV9.Object
         // Cette fonction permet  ne pas perdre les enfants et aussi  et aussi de Supprimer proprement un tag parent sans erreur.
         public void SupprimerParent()
         {
-            DAO_Tag dao = new DAO_Tag();
+            DAO_TagImg dao = new DAO_TagImg();
             MySqlConnection connection = DataBase.GetInstance();
             MySqlTransaction transaction = connection.BeginTransaction();
 
@@ -99,7 +99,7 @@ namespace PhotossimoV9.Object
 
         public void SupprimerEnfant()
         {
-            DAO_Tag dao = new DAO_Tag();
+            DAO_TagImg dao = new DAO_TagImg();
             MySqlConnection connection = DataBase.GetInstance();
             MySqlTransaction transaction = connection.BeginTransaction();
             try

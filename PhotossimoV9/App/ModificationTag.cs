@@ -73,7 +73,7 @@ namespace PhotossimoV9.App
             }
 
             // ici , on va se connecter à la base de données pour modifier le tag
-            var dao = new DAO_Tag();
+            var dao = new DAO_TagImg();
             var connexion = DataBase.GetInstance();
             var transaction = connexion.BeginTransaction();
 

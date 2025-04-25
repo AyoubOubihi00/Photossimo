@@ -69,7 +69,7 @@ namespace Photossimo
 
                 //on l'ajoute à la base de données
                 MySqlTransaction transaction = DataBase.GetInstance().BeginTransaction();
-                new DAO_Tag().Create(nouveauTag, transaction);
+                new DAO_TagImg().Create(nouveauTag, transaction);
                 transaction.Commit();
 
                 MessageBox.Show($"Tag '{nomTag}' créé avec succès.", "Succès", MessageBoxButtons.OK, MessageBoxIcon.Information);

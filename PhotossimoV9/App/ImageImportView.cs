@@ -18,8 +18,8 @@ namespace Photossimo
     public partial class ImageImportView : Form
     {
         MainView mainView;
-        Image imgSelected;
-        private string FileImageSelectionne;
+        Image? imgSelected;
+        private string? FileImageSelectionne;
         // Partie initialisation des tags dans la fenêtre principale
         private void ChargerTags()
         {
@@ -45,9 +45,9 @@ namespace Photossimo
         {
             if (comboBoxTag.SelectedItem != null)
             {
-                string tagNom = comboBoxTag.SelectedItem.ToString();
+                string? tagNom = comboBoxTag.SelectedItem.ToString();
 
-                if (!listBoxTagsSelectionnes.Items.Contains(tagNom))
+                if (tagNom is not null && !listBoxTagsSelectionnes.Items.Contains(tagNom))
                     listBoxTagsSelectionnes.Items.Add(tagNom);
                 else
                     MessageBox.Show("Tag déjà sélectionné", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -91,11 +91,12 @@ namespace Photossimo
                 if (tagtrouve != null)
                     tagsAssocies.Add(tagtrouve);
             }
-
+            if(FileImageSelectionne is null) throw new ArgumentNullException("FileImageSelectionne est null");
             Img nouvelleImage = new(-1, FileImageSelectionne, DateTime.Now, tagsAssocies);
             string cheminImage = nouvelleImage.GetCheminImage();
 
-            Directory.CreateDirectory(Path.GetDirectoryName(cheminImage));
+            string? directoryPath = Path.GetDirectoryName(cheminImage);
+            if(directoryPath is not null) Directory.CreateDirectory(directoryPath);
             if(!File.Exists(cheminImage)) imgSelected.Save(cheminImage, System.Drawing.Imaging.ImageFormat.Jpeg);
 
             nouvelleImage.Image = Image.FromFile(nouvelleImage.GetCheminImage());

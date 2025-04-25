@@ -109,7 +109,7 @@ namespace PhotossimoV9.App
                 using var trx = db.BeginTransaction();
                 try
                 {
-                    new DAO_Tag().Update(tag, trx);
+                    new DAO_TagImg().Update(tag, trx);
                     trx.Commit();
                 }
                 catch
