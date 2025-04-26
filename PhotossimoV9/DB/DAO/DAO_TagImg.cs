@@ -25,7 +25,7 @@ namespace PhotossimoV9.DB.DAO
                 command.CommandText = "INSERT INTO tags(" +
                     "nom_tag, id_parent)" +
                     "VALUES(@nom_tag, @id_parent);";
-                command.Parameters.AddWithValue("@nom_tag", tag.IdTag);
+                command.Parameters.AddWithValue("@nom_tag", tag.NomTag);
                 if (tag.Parent is not null) command.Parameters.AddWithValue("@id_parent", tag.Parent.IdTag);
                 else command.Parameters.AddWithValue("@id_parent", DBNull.Value);
                 command.ExecuteNonQuery();

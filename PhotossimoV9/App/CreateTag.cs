@@ -65,7 +65,7 @@ namespace Photossimo
 
             try
             {
-                TagImg nouveauTag = TagImg.GetOrCreate(0, nomTag, parentTag); // On cree un nouveau tag 
+                TagImg nouveauTag = TagImg.GetOrCreate(-1, nomTag, parentTag); // On cree un nouveau tag 
 
                 //on l'ajoute à la base de données
                 MySqlTransaction transaction = DataBase.GetInstance().BeginTransaction();
