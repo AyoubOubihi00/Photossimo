@@ -38,7 +38,7 @@ namespace Photossimo
 
         private void MainViewLoad(object sender, EventArgs e)
         {
-
+            
             TagImg.InitializeDictionary();
             listImg = new DAO_Image().FindAll();
             LoadTagTreeView();
@@ -69,19 +69,18 @@ namespace Photossimo
         private void ButtonGestionTag(object sender, EventArgs e)
         {
             GestionTag gestionTagForm = new GestionTag();
-            var result = gestionTagForm.ShowDialog();
+            //var result = gestionTagForm.ShowDialog();
 
-            // On vérifie si le tag a été supprimer et si le cas "oui" on recharge l'arbre
-            if (result == DialogResult.OK)
+            gestionTagForm.FormClosed += (s, args) =>
             {
-
                 TagImg.ClearDictionary();
                 TagImg.InitializeDictionary();
                 LoadTagTreeView();  // On recharge l'arbre avce les tag ajoute , ou avec le tag supprimé
-            }
+            };
 
+            gestionTagForm.ShowDialog();
 
-        }
+        }   
 
         private void AfficherImages(List<Img> images)
         {

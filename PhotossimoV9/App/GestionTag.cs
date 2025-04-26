@@ -160,8 +160,6 @@ namespace PhotossimoV9.App
             var msg = "Confirmez la suppression :\n" + string.Join("\n", names);
             if (MessageBox.Show(msg, "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes) return;
 
-            var db = DataBase.GetInstance();
-            using var trx = db.BeginTransaction();
             try
             {
                 foreach (var row in rows)
@@ -171,11 +169,12 @@ namespace PhotossimoV9.App
                     if (tag.IdTag != 0)
                         tag.SupprimerEnfant();
                 }
-                trx.Commit();
+                
             }
-            catch
+            catch(Exception ex)
             {
-                trx.Rollback();
+                MessageBox.Show("Erreur lors de la suppression : " + ex.Message, "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                
             }
 
             TagImg.ClearDictionary();
