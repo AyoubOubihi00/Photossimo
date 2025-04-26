@@ -66,6 +66,7 @@ namespace PhotossimoV9.DB.DAO
             command.Connection = connection;
 
             List<TagImg> listTag = [];
+            List<(int, int)> listIdIdParent = [];
 
             try
             {
@@ -81,12 +82,20 @@ namespace PhotossimoV9.DB.DAO
                             if (msdr["nom_tag"] is not string nomTag) throw new ArgumentNullException("NomTag invalide");
                             if (!Int32.TryParse(msdr["id_parent"].ToString(), out int idParent)) throw new ArgumentNullException("IdParent invalide");
 
-                            if (!TagImg.GetTagDictionary().TryGetValue(idParent, out TagImg? parent)) throw new ArgumentException("Le parent avec l'id " + idParent + " n'existe pas");
-                            TagImg newTag = TagImg.GetOrCreate(idTag, nomTag, parent);
+                            TagImg newTag = TagImg.GetOrCreate(idTag, nomTag, null);
                             listTag.Add(newTag);
+                            listIdIdParent.Add((idTag, idParent));
                         }
                     }
-                } 
+                    msdr.Close();
+                }
+
+                foreach(var (idTag, idParent) in listIdIdParent)
+                {
+                    if(TagImg.GetTagDictionary().TryGetValue(idParent, out TagImg? parent))
+                        TagImg.GetTagDictionary()[idTag].Parent = parent;
+                }
+
             }
             catch (Exception e)
             {

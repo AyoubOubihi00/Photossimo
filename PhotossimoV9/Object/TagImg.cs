@@ -38,7 +38,6 @@ namespace PhotossimoV9.Object
             if (_tagDictionary.TryGetValue(id, out TagImg? tag)) return tag;
             else
             {
-                if (parent is null) GetTagDictionary().TryGetValue(0, out parent);
                 tag = new TagImg(id, nomTag, parent);
                 _tagDictionary.Add(id, tag);
                 return tag;
