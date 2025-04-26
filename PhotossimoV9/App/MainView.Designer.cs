@@ -163,6 +163,7 @@
             buttonEdit.TabIndex = 6;
             buttonEdit.Text = "Modifier Séléction";
             buttonEdit.UseVisualStyleBackColor = true;
+            buttonEdit.Click += ButtonModifSelection;
             // 
             // tableLayoutPanel3
             // 

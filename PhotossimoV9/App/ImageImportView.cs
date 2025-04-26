@@ -91,17 +91,17 @@ namespace Photossimo
                 if (tagtrouve != null)
                     tagsAssocies.Add(tagtrouve);
             }
-            if(FileImageSelectionne is null) throw new ArgumentNullException("FileImageSelectionne est null");
+            if (FileImageSelectionne is null) throw new ArgumentNullException("FileImageSelectionne est null");
             Img nouvelleImage = new(-1, FileImageSelectionne, DateTime.Now, tagsAssocies);
             string cheminImage = nouvelleImage.GetCheminImage();
 
             string? directoryPath = Path.GetDirectoryName(cheminImage);
-            if(directoryPath is not null) Directory.CreateDirectory(directoryPath);
-            if(!File.Exists(cheminImage)) imgSelected.Save(cheminImage, System.Drawing.Imaging.ImageFormat.Jpeg);
+            if (directoryPath is not null) Directory.CreateDirectory(directoryPath);
+            if (!File.Exists(cheminImage)) imgSelected.Save(cheminImage, System.Drawing.Imaging.ImageFormat.Jpeg);
 
             nouvelleImage.Image = Image.FromFile(nouvelleImage.GetCheminImage());
 
-            MySqlTransaction transaction =  DataBase.GetInstance().BeginTransaction();
+            MySqlTransaction transaction = DataBase.GetInstance().BeginTransaction();
             new DAO_Image().Create(nouvelleImage, transaction);
             transaction.Commit();
 
@@ -139,5 +139,6 @@ namespace Photossimo
             if (confirmation == DialogResult.Yes)
                 Close();
         }
+
     }
 }
