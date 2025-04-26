@@ -100,6 +100,7 @@ namespace PhotossimoV9.DB.DAO
 
                     listImg.Add(img);
                 }
+                reader.Close();
             }
             catch (Exception e)
             {
