@@ -27,7 +27,7 @@ namespace Photossimo
         {
             listImg.Remove(image);
             listViewImage.Items.RemoveAt(index);
-            if(listViewImage.LargeImageList is not null) listViewImage.LargeImageList.Images.RemoveAt(index);
+            listViewImage.LargeImageList.Images.RemoveAt(index);
         }
 
         private void buttonImport_Click(object sender, EventArgs e)
@@ -99,8 +99,9 @@ namespace Photossimo
             }
         }
 
-        private void AddNewImageToListViewimage(Img image) {
-            if(listViewImage.LargeImageList is not null)
+        private void AddNewImageToListViewimage(Img image)
+        {
+            if (listViewImage.LargeImageList is not null)
                 listViewImage.LargeImageList.Images.Add(image.Image);
             else
             {
@@ -122,9 +123,10 @@ namespace Photossimo
             if (listViewImage.SelectedItems.Count > 0)
             {
                 DialogResult result = MessageBox.Show("Voulez-vous vraiment supprimer " + listViewImage.SelectedItems.Count + " image(s) ? ", "Confirmer la suppression", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
-                if (result == DialogResult.Yes) {
+                if (result == DialogResult.Yes)
+                {
                     int nbDeleted = 0;
-                    foreach(ListViewItem item in listViewImage.SelectedItems)
+                    foreach (ListViewItem item in listViewImage.SelectedItems)
                     {
                         Img? imageToDelete = item.Tag as Img;
                         if (imageToDelete is not null)
@@ -152,6 +154,32 @@ namespace Photossimo
             }
             else
                 MessageBox.Show("Veuillez sélectionner une ou plusieurs image(s)", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        private void ButtonModifSelection(object sender, EventArgs e)
+        {
+            // Vérifie si au moins une image est sélectionnée
+            if (listViewImage.SelectedItems.Count == 0)
+            {
+                MessageBox.Show("Veuillez sélectionner une image", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // Récupère les images sélectionnées
+
+            List<Img> imagesSelectionnes = new List<Img>();
+
+            foreach (ListViewItem item in listViewImage.SelectedItems)
+            {
+                if(item.Tag is Img image)
+                {
+                    imagesSelectionnes.Add(image);
+                }
+            }
+
+            // Ouvre la fenêtre de modification des tags et on lui passe les images sélectionnées
+            ModificationImage_Tag modifImgTag = new ModificationImage_Tag(imagesSelectionnes);
+            modifImgTag.ShowDialog();
         }
     }
 }
