@@ -79,7 +79,9 @@ namespace PhotossimoV9.App
 
             try
             {
+                var ancienParent = tagmodifier.Parent;
                 tagmodifier.NomTag = nouveauNomTag;
+
 
                 if(!string.IsNullOrEmpty(nouveauNomParentTag)) // ici on verifie si le nom du parent tag n'est pas vide
                 {
@@ -92,10 +94,21 @@ namespace PhotossimoV9.App
                         transaction.Rollback();
                         return;
                     }
-                    else
+                    /*else
                     {
-                        tagmodifier.Parent = parentTag; // ici on associe le parent tag au tag qu'on veut modifier
-                    }
+                        tagmodifier.Parent = parentTag;
+                        
+                    }*/
+                    ancienParent?.Enfants.Remove(tagmodifier); // ici on va supprimer le tag de l'ancien parent
+                    tagmodifier.Parent = parentTag; // ici on va ajouter le tag au nouveau parent
+
+                    parentTag.Enfants.Add(tagmodifier); // ici on va ajouter le tag au nouveau parent
+
+                    parentTag.Parent = ancienParent; // ici on va recuperer l'ancien parent du parent tag
+
+                    dao.Update(parentTag, transaction); // ici on va modifier le parent tag dans la base de données
+
+
                 }
                 // ici on va modifier le tag dans la base de données
                 dao.Update(tagmodifier, transaction);
