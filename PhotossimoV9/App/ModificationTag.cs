@@ -55,6 +55,7 @@ namespace PhotossimoV9.App
         // Fonction pour valider la modification d'un tag
         private void ValiderModification(object sender, EventArgs e)
         {
+            string AnciensNomTag = textBoxNomTag.Text.Trim(); // ici on recupére le nom du tag qu'on veut modfifier
             string nouveauNomTag = textBoxNomTagNew.Text.Trim(); // ici on récupére le nom du tag
             string nouveauNomParentTag;// ici on récupére le nom du parent tag selectione dans la liste 
             if(comboBoxParent.SelectedItem != null)
@@ -68,8 +69,7 @@ namespace PhotossimoV9.App
 
             if (string.IsNullOrEmpty(nouveauNomTag)) // on verifie si le nom du tag est vide
             {
-                MessageBox.Show("Veuillez entrer un nom de tag valide.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                nouveauNomTag = AnciensNomTag; // si le nom du tag est vide, on met le nom du tag d'origine
             }
 
             // ici , on va se connecter à la base de données pour modifier le tag
