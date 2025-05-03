@@ -61,14 +61,14 @@ namespace PhotossimoV9.App
 
         private void listViewImages_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(listViewImages.SelectedItems.Count > 0)
+            if (listViewImages.SelectedItems.Count > 0)
             {
                 ListViewItem imagesselctionne = listViewImages.SelectedItems[0];
-                if(imagesselctionne.Tag is Img selectedImage)
+                if (imagesselctionne.Tag is Img selectedImage)
                 {
                     listBoxTag.Items.Clear();
 
-                    foreach(TagImg tag in selectedImage.Tags)
+                    foreach (TagImg tag in selectedImage.Tags)
                     {
                         listBoxTag.Items.Add(tag.NomTag);
                     }
@@ -78,5 +78,13 @@ namespace PhotossimoV9.App
             }
         }
 
+        private void buttonCancel_Click(object sender, EventArgs e)
+        {
+            var confirmation = MessageBox.Show("Voulez-vous vraiment annuler ?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+            if (confirmation == DialogResult.Yes)
+                Close();
+      
+        }
     }
 }

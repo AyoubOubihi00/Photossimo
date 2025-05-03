@@ -40,6 +40,7 @@
             pictureBox1 = new PictureBox();
             tableLayoutPanel1 = new TableLayoutPanel();
             panelDroit = new TableLayoutPanel();
+            button1 = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             tableLayoutPanel1.SuspendLayout();
             panelDroit.SuspendLayout();
@@ -166,6 +167,7 @@
             tableLayoutPanel1.Controls.Add(panelDroit, 1, 3);
             tableLayoutPanel1.Controls.Add(buttonCancel, 0, 5);
             tableLayoutPanel1.Controls.Add(buttonValiderImport, 1, 5);
+            tableLayoutPanel1.Controls.Add(button1, 0, 2);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -192,8 +194,18 @@
             panelDroit.RowStyles.Add(new RowStyle(SizeType.Absolute, 33F));
             panelDroit.RowStyles.Add(new RowStyle(SizeType.Absolute, 27F));
             panelDroit.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            panelDroit.Size = new Size(200, 555);
+            panelDroit.Size = new Size(200, 529);
             panelDroit.TabIndex = 4;
+            // 
+            // button1
+            // 
+            button1.Location = new Point(3, 103);
+            button1.Name = "button1";
+            button1.Size = new Size(215, 29);
+            button1.TabIndex = 7;
+            button1.Text = "Modification Nom Image";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += ModifNom_click;
             // 
             // ImageImportView
             // 
@@ -227,5 +239,6 @@
         private PictureBox pictureBox1;
         private TableLayoutPanel tableLayoutPanel1;
         private TableLayoutPanel panelDroit;
+        private Button button1;
     }
 }

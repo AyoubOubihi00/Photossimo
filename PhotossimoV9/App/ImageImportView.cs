@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Google.Protobuf.WellKnownTypes;
 using MySql.Data.MySqlClient;
+using PhotossimoV9.App;
 using PhotossimoV9.DB;
 using PhotossimoV9.DB.DAO;
 using PhotossimoV9.Object;
@@ -140,5 +141,19 @@ namespace Photossimo
                 Close();
         }
 
+        private void ModifNom_click(object sender, EventArgs e)
+        {
+            if (FileImageSelectionne is null)
+            {
+                MessageBox.Show("Veuillez sélectionner une image", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            NomImageModif nomImageModif = new NomImageModif(FileImageSelectionne);
+            if (nomImageModif.ShowDialog() == DialogResult.OK)
+            {
+                FileImageSelectionne = nomImageModif.NouveauNom;
+            }
+        }
     }
 }
