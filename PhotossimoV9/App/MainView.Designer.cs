@@ -32,7 +32,7 @@
             tableLayoutPanel2 = new TableLayoutPanel();
             buttonDelete = new Button();
             label3 = new Label();
-            label2 = new Label();
+            labelTags = new Label();
             buttonImport = new Button();
             buttonCreateTag = new Button();
             buttonEdit = new Button();
@@ -71,7 +71,7 @@
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.2460575F));
             tableLayoutPanel2.Controls.Add(buttonDelete, 2, 0);
             tableLayoutPanel2.Controls.Add(label3, 0, 0);
-            tableLayoutPanel2.Controls.Add(label2, 0, 2);
+            tableLayoutPanel2.Controls.Add(labelTags, 0, 2);
             tableLayoutPanel2.Controls.Add(buttonImport, 1, 0);
             tableLayoutPanel2.Controls.Add(buttonCreateTag, 2, 1);
             tableLayoutPanel2.Controls.Add(buttonEdit, 1, 1);
@@ -117,14 +117,13 @@
             label3.Text = "Photossimo";
             label3.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // label2
+            // labelTags
             // 
-            label2.AutoSize = true;
-            label2.Location = new Point(3, 158);
-            label2.Name = "label2";
-            label2.Size = new Size(50, 20);
-            label2.TabIndex = 1;
-            label2.Text = "label2";
+            labelTags.AutoSize = true;
+            labelTags.Location = new Point(3, 158);
+            labelTags.Name = "labelTags";
+            labelTags.Size = new Size(0, 20);
+            labelTags.TabIndex = 1;
             // 
             // buttonImport
             // 
@@ -215,11 +214,13 @@
             // 
             // tagTreeView
             // 
+            tagTreeView.CheckBoxes = true;
             tagTreeView.Dock = DockStyle.Fill;
             tagTreeView.Location = new Point(3, 91);
             tagTreeView.Name = "tagTreeView";
             tagTreeView.Size = new Size(148, 350);
             tagTreeView.TabIndex = 1;
+            tagTreeView.AfterCheck += tagTreeView_AfterCheck;
             // 
             // label1
             // 
@@ -256,7 +257,7 @@
         private TableLayoutPanel tableLayoutPanel1;
         private TableLayoutPanel tableLayoutPanel2;
         private Label label3;
-        private Label label2;
+        private Label labelTags;
         private Button buttonImport;
         private Button buttonDelete;
         private Button buttonCreateTag;
