@@ -47,14 +47,12 @@
             tableLayoutPanel3.SuspendLayout();
             tableLayoutPanel4.SuspendLayout();
             SuspendLayout();
-            // 
             // tableLayoutPanel1
-            // 
             tableLayoutPanel1.ColumnCount = 2;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 80F));
-            tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 1, 0);
             tableLayoutPanel1.Controls.Add(tableLayoutPanel4, 0, 0);
+            tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 1, 0);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -62,25 +60,25 @@
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel1.Size = new Size(800, 450);
             tableLayoutPanel1.TabIndex = 0;
-            // 
+
             // tableLayoutPanel2
-            // 
             tableLayoutPanel2.ColumnCount = 3;
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 67.35016F));
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.2460575F));
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.2460575F));
-            tableLayoutPanel2.Controls.Add(buttonDelete, 2, 0);
             tableLayoutPanel2.Controls.Add(label3, 0, 0);
-            tableLayoutPanel2.Controls.Add(labelTags, 0, 2);
             tableLayoutPanel2.Controls.Add(buttonImport, 1, 0);
-            tableLayoutPanel2.Controls.Add(buttonCreateTag, 2, 1);
-            tableLayoutPanel2.Controls.Add(buttonEdit, 1, 1);
+            tableLayoutPanel2.Controls.Add(buttonDelete, 2, 0);
             tableLayoutPanel2.Controls.Add(tableLayoutPanel3, 0, 1);
+            tableLayoutPanel2.Controls.Add(buttonEdit, 1, 1);
+            tableLayoutPanel2.Controls.Add(buttonCreateTag, 2, 1);
+            tableLayoutPanel2.Controls.Add(labelTags, 0, 2);
             tableLayoutPanel2.Controls.Add(listViewImage, 0, 3);
             tableLayoutPanel2.Dock = DockStyle.Fill;
             tableLayoutPanel2.Location = new Point(163, 3);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 4;
+            tableLayoutPanel2.RowStyles.Clear();
             tableLayoutPanel2.RowStyles.Add(new RowStyle());
             tableLayoutPanel2.RowStyles.Add(new RowStyle());
             tableLayoutPanel2.RowStyles.Add(new RowStyle());
@@ -162,9 +160,24 @@
             // 
             // tableLayoutPanel3
             // 
+            // In tableLayoutPanel3, add listBoxSuggestions below textBox1
+            listBoxSuggestions = new ListBox();
+            listBoxSuggestions.Visible = false;
+            listBoxSuggestions.Dock = DockStyle.Top;
+            listBoxSuggestions.Height = 100;
+            listBoxSuggestions.MaximumSize = new Size(0, 200);
+            listBoxSuggestions.Click += ListBoxSuggestions_Click;
+            // insert into tableLayoutPanel3 at row index 1
+            tableLayoutPanel3.RowCount = 2;
+            tableLayoutPanel3.RowStyles.Clear();
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            tableLayoutPanel3.Controls.Add(textBox1, 0, 0);
+            tableLayoutPanel3.Controls.Add(listBoxSuggestions, 0, 1);
             tableLayoutPanel3.ColumnCount = 1;
             tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             tableLayoutPanel3.Controls.Add(textBox1, 0, 0);
+            tableLayoutPanel3.Controls.Add(listBoxSuggestions, 0, 1);
             tableLayoutPanel3.Dock = DockStyle.Fill;
             tableLayoutPanel3.Location = new Point(3, 69);
             tableLayoutPanel3.Name = "tableLayoutPanel3";
@@ -176,7 +189,7 @@
             // 
             // textBox1
             // 
-            textBox1.Dock = DockStyle.Fill;
+            textBox1.Dock = DockStyle.Top;
             textBox1.Location = new Point(10, 4);
             textBox1.Margin = new Padding(10, 4, 10, 4);
             textBox1.Name = "textBox1";
@@ -236,6 +249,19 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
             Controls.Add(tableLayoutPanel1);
+            // add suggestion box on top-level so it can overlay
+            tableLayoutPanel3.Controls.Remove(listBoxSuggestions);
+            this.Controls.Add(listBoxSuggestions);
+            listBoxSuggestions.Dock = DockStyle.None;
+            listBoxSuggestions.Size = new Size(textBox1.Width, 150);
+            // reposition dynamically whenever layout changes
+            tableLayoutPanel3.Layout += (s, e) =>
+            {
+                var screenPt = textBox1.PointToScreen(Point.Empty);
+                var clientPt = this.PointToClient(screenPt);
+                listBoxSuggestions.Location = new Point(clientPt.X, clientPt.Y + textBox1.Height);
+                listBoxSuggestions.BringToFront();
+            };
             Name = "MainView";
             Text = "Photossimo";
             Load += MainViewLoad;
@@ -265,5 +291,6 @@
         private TreeView tagTreeView;
         private Label label1;
         private ListView listViewImage;
+        private ListBox listBoxSuggestions;
     }
 }

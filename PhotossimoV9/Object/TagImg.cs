@@ -46,10 +46,16 @@ namespace PhotossimoV9.Object
 
         public static void InitializeDictionary()
         {
+            // 1) On vide ce qui pourrait rester d’un appel précédent
+            _tagDictionary.Clear();
+
+            // 2) On crée le root
             TagImg root = new(0, "root", null);
             _tagDictionary.Add(root.IdTag, root);
 
+            // 3) On charge ensuite le reste des tags depuis la BDD
             List<TagImg> tags = new DAO_TagImg().FindAll();
+            // (FindAll utilise GetOrCreate pour ajouter les enfants sans dupliquer la clé 0)
         }
 
         public static Dictionary<int, TagImg> GetTagDictionary()

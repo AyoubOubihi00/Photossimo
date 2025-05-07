@@ -6,6 +6,7 @@ using PhotossimoV9.App;
 using PhotossimoV9.DB;
 using PhotossimoV9.DB.DAO;
 using PhotossimoV9.Object;
+using PhotossimoV9.Utils;
 
 namespace Photossimo
 {
@@ -15,7 +16,122 @@ namespace Photossimo
         public MainView()
         {
             InitializeComponent();
+            ConfigureTagSearch();
         }
+
+        private AutoCompleteStringCollection _tagSource;
+
+        private void ConfigureTagSearch()
+        {
+            textBox1.TextChanged += TextBox1_TextChanged;
+        }
+
+        private void TextBox1_TextChanged(object sender, EventArgs e)
+        {
+            string filter = textBox1.Text.Trim();
+            if (string.IsNullOrEmpty(filter))
+            {
+                // Masquer les suggestions, sans toucher à l'arborescence déjà sélectionnée
+                listBoxSuggestions.Visible = false;
+                return;
+            }
+            // Filtrer les suggestions sous la textbox
+            // Normalize filter by removing diacritics
+            var normalizedFilter = Utils.RemoveDiacritics(filter).ToLowerInvariant();
+            // Collect all matching tag names ignoring diacritics
+            var allMatches = TagImg.GetTagDictionary().Values
+                             .Where(t => t.IdTag != 0 && Utils.RemoveDiacritics(t.NomTag).ToLowerInvariant().Contains(normalizedFilter))
+                             .Select(t => t.NomTag)
+                             .ToList();
+            // Prioritize those starting with filter (ignoring diacritics), then others
+            var prefixMatches = allMatches
+                .Where(n => Utils.RemoveDiacritics(n).ToLowerInvariant().StartsWith(normalizedFilter))
+                .OrderBy(n => n);
+            var otherMatches = allMatches
+                .Where(n => !Utils.RemoveDiacritics(n).ToLowerInvariant().StartsWith(normalizedFilter))
+                .OrderBy(n => n);
+            var matches = prefixMatches.Concat(otherMatches).ToArray(); (otherMatches).ToArray();
+
+
+            // Si une seule correspondance exacte, sélectionner directement
+            if (matches.Length == 1 && matches[0].Equals(filter, StringComparison.OrdinalIgnoreCase))
+            {
+                listBoxSuggestions.Visible = false;
+                // coche et déploie dans l'arbre
+                var tag = TagImg.GetTagDictionary().Values.First(t => t.NomTag.Equals(filter, StringComparison.OrdinalIgnoreCase));
+                var node = FindNodeByTag(tagTreeView.Nodes, tag);
+                if (node != null)
+                {
+                    // expand parents
+                    TreeNode? p = node.Parent;
+                    while (p != null)
+                    {
+                        p.Expand(); p = p.Parent;
+                    }
+                    node.Checked = true;
+                    AfficheLabelTags();
+                }
+                return;
+            }
+
+            if (matches.Any())
+            {
+                listBoxSuggestions.Items.Clear();
+                listBoxSuggestions.Items.AddRange(matches);
+                listBoxSuggestions.Visible = true;
+            }
+            else
+            {
+                listBoxSuggestions.Visible = false;
+            }
+        }
+
+        private void ListBoxSuggestions_Click(object sender, EventArgs e)
+        {
+            if (listBoxSuggestions.SelectedItem is string chosen)
+            {
+                textBox1.Text = chosen;
+                listBoxSuggestions.Visible = false;
+
+                // trouve l'objet TagImg
+                var tag = TagImg.GetTagDictionary().Values
+                             .FirstOrDefault(t => t.NomTag.Equals(chosen, StringComparison.OrdinalIgnoreCase));
+                if (tag != null)
+                {
+                    // trouve et coche le noeud, en déployant les parents
+                    var node = FindNodeByTag(tagTreeView.Nodes, tag);
+                    if (node != null)
+                    {
+                        // décocher tous d'abord si souhaité ou laisser existants
+                        // Déploiement
+                        TreeNode? p = node.Parent;
+                        while (p != null)
+                        {
+                            p.Expand();
+                            p = p.Parent;
+                        }
+                        node.Checked = true;
+                        // Met à jour l'affichage des images selon sélection
+                        AfficheLabelTags();
+                    }
+                }
+            }
+        }
+
+
+        // méthode récursive pour retrouver le TreeNode dont .Tag == tag
+        private TreeNode? FindNodeByTag(TreeNodeCollection nodes, TagImg tag)
+        {
+            foreach (TreeNode n in nodes)
+            {
+                if (n.Tag is TagImg t && t.IdTag == tag.IdTag)
+                    return n;
+                var child = FindNodeByTag(n.Nodes, tag);
+                if (child != null) return child;
+            }
+            return null;
+        }
+
         private void ListViewImage_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             if (listViewImage.SelectedItems.Count != 1) return;
