@@ -273,6 +273,7 @@
             tableLayoutPanel4.ResumeLayout(false);
             tableLayoutPanel4.PerformLayout();
             ResumeLayout(false);
+            this.WindowState = FormWindowState.Maximized;
         }
 
         #endregion

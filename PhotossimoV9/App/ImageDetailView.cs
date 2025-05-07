@@ -30,24 +30,25 @@ namespace PhotossimoV9.App
                 pictureBoxFull.Image = new Bitmap(temp);
                 temp.Dispose();
             }
+            // restaure l'affichage à taille réelle
             pictureBoxFull.Size = pictureBoxFull.Image.Size;
             pictureBoxFull.SizeMode = PictureBoxSizeMode.Normal;
+            panelImage.AutoScrollMinSize = pictureBoxFull.Image.Size;
 
-            // Affiche le nom sous l’image
             labelName.Text = _img.NomImage;
 
-            // Charge les tags (sans le root)
-            listBoxTags.DataSource = _img.Tags
-                                         .Where(t => t.IdTag != 0)
-                                         .Select(t => t.NomTag)
-                                         .ToList();
+            // Construire l'arbre sans déclencher AfterCheck
+            treeViewTags.AfterCheck -= treeViewTags_AfterCheck;
+            LoadTagTree();
+            treeViewTags.AfterCheck += treeViewTags_AfterCheck;
 
             this.Shown += ImageDetailView_Shown;
         }
 
         private void ImageDetailView_Shown(object sender, EventArgs e)
         {
-            int controlsHeight = rightPanel.Height;
+            // ajuste la fenêtre pour afficher l'image en taille réelle
+            int controlsHeight = bottomLeftFlow.Height;
             int deltaHeight = this.Height - this.ClientSize.Height;
             int deltaWidth = this.Width - this.ClientSize.Width;
 
@@ -60,99 +61,95 @@ namespace PhotossimoV9.App
 
             this.Size = new Size(desiredClientWidth + deltaWidth, desiredClientHeight + deltaHeight);
             panelImage.AutoScrollMinSize = pictureBoxFull.Image.Size;
-
-            // Recharger les tags (au cas où)
-            listBoxTags.DataSource = null;
-            listBoxTags.DataSource = _img.Tags
-                                     .Where(t => t.IdTag != 0)
-                                     .Select(t => t.NomTag)
-                                     .ToList();
         }
 
-        private void btnRename_Click(object sender, EventArgs e)
+        private void LoadTagTree()
         {
-            using var ren = new NomImageModif(_img.NomImage);
-            if (ren.ShowDialog() != DialogResult.OK)
-                return;
+            treeViewTags.Nodes.Clear();
+            var rootTag = TagImg.GetTagDictionary()[0];
+            var rootNode = new TreeNode(rootTag.NomTag) { Tag = rootTag };
+            BuildTree(rootTag, rootNode);
+            treeViewTags.Nodes.Add(rootNode);
+            rootNode.Expand();
 
-            string oldName = _img.NomImage;
-            string extension = System.IO.Path.GetExtension(oldName);
-            _img.NomImage = ren.NouveauNom + extension;
-
-            // 1) MAJ BDD
-            using (var tx = DataBase.GetInstance().BeginTransaction())
+            // coche uniquement les feuilles associées
+            var leafIds = _img.Tags.Where(t => t.IdTag != 0).Select(t => t.IdTag).ToHashSet();
+            foreach (var leaf in GetLeaves(rootNode))
             {
-                _dao.Update(_img, tx);
-                tx.Commit();
+                if (leaf.Tag is TagImg tg && leafIds.Contains(tg.IdTag))
+                {
+                    var p = leaf.Parent;
+                    while (p != null) { p.Expand(); p = p.Parent; }
+                    leaf.Checked = true;
+                }
             }
-
-            // 2) Dispose de TOUTES les images pour libérer le fichier
-            if (_img.Image != null)
-            {
-                _img.Image.Dispose();
-                _img.Image = null!;
-            }
-            if (pictureBoxFull.Image != null)
-            {
-                pictureBoxFull.Image.Dispose();
-                pictureBoxFull.Image = null;
-            }
-
-            // 3) Renommage physique
-            var folder = Path.GetDirectoryName(_img.GetCheminImage());
-            var oldPath = Path.Combine(folder!, oldName);
-            var newPath = Path.Combine(folder, _img.NomImage);
-            if (File.Exists(oldPath))
-                File.Move(oldPath, newPath);
-
-            // 4) Recharger l’image clonée
-            using (var fs = new FileStream(newPath, FileMode.Open, FileAccess.Read))
-            {
-                var tmp = Image.FromStream(fs);
-                var bmp = new Bitmap(tmp);
-                tmp.Dispose();
-
-                _img.Image = bmp;
-                pictureBoxFull.Image = bmp;
-                pictureBoxFull.Size = bmp.Size;
-            }
-
-            // 5) Mise à jour du label et de la vue principale
-            labelName.Text = _img.NomImage;
-            _parent.RefreshListView();
         }
 
-
-        private void btnEditTags_Click(object sender, EventArgs e)
+        private void BuildTree(TagImg parent, TreeNode node)
         {
-            using var et = new ModificationImage_Tag(new System.Collections.Generic.List<Img> { _img });
-            if (et.ShowDialog() != DialogResult.OK) return;
+            foreach (var child in parent.Enfants)
+            {
+                var n = new TreeNode(child.NomTag) { Tag = child };
+                node.Nodes.Add(n);
+                BuildTree(child, n);
+            }
+        }
+
+        private IEnumerable<TreeNode> GetLeaves(TreeNode node)
+        {
+            if (node.Nodes.Count == 0) yield return node;
+            else foreach (TreeNode c in node.Nodes)
+                    foreach (var leaf in GetLeaves(c))
+                        yield return leaf;
+        }
+
+        private void treeViewTags_AfterCheck(object sender, TreeViewEventArgs e)
+        {
+            treeViewTags.AfterCheck -= treeViewTags_AfterCheck;
+            foreach (TreeNode c in e.Node.Nodes)
+                c.Checked = e.Node.Checked;
+            treeViewTags.AfterCheck += treeViewTags_AfterCheck;
+        }
+
+        private void btnValidateTags_Click(object sender, EventArgs e)
+        {
+            _img.Tags.Clear();
+            foreach (var leaf in GetLeaves(treeViewTags.Nodes[0]))
+                if (leaf.Checked && leaf.Tag is TagImg tg)
+                    _img.Tags.Add(tg);
 
             using var tx = DataBase.GetInstance().BeginTransaction();
             _dao.Update(_img, tx);
             tx.Commit();
 
-            listBoxTags.DataSource = _img.Tags
-                                     .Where(t => t.IdTag != 0)
-                                     .Select(t => t.NomTag)
-                                     .ToList();
+            _parent.RefreshListView();
+            MessageBox.Show("Tags mis à jour.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void btnRename_Click(object sender, EventArgs e)
+        {
+            using var ren = new NomImageModif(_img.NomImage);
+            if (ren.ShowDialog() != DialogResult.OK) return;
+            string oldName = _img.NomImage;
+            string ext = Path.GetExtension(oldName);
+            _img.NomImage = ren.NouveauNom + ext;
+            using (var tx = DataBase.GetInstance().BeginTransaction()) { _dao.Update(_img, tx); tx.Commit(); }
+            pictureBoxFull.Image.Dispose();
+            File.Move(Path.Combine(Path.GetDirectoryName(_img.GetCheminImage())!, oldName), _img.GetCheminImage());
+            using var fs = new FileStream(_img.GetCheminImage(), FileMode.Open, FileAccess.Read);
+            pictureBoxFull.Image = new Bitmap(Image.FromStream(fs));
+            labelName.Text = _img.NomImage;
             _parent.RefreshListView();
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Supprimer cette image définitivement ?", "Confirmation",
-                                 MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
+            if (MessageBox.Show("Supprimer cette image définitivement ?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
                 return;
-
             using var tx = DataBase.GetInstance().BeginTransaction();
             _dao.Delete(_img, tx);
             tx.Commit();
-
-            string path = _img.GetCheminImage();
-            pictureBoxFull.Image.Dispose();
-            if (File.Exists(path)) File.Delete(path);
-
+            File.Delete(_img.GetCheminImage());
             _parent.RemoveImage(_img, _parent.listImg.IndexOf(_img));
             Close();
         }
