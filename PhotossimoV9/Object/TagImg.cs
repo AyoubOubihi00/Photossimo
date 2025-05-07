@@ -46,7 +46,7 @@ namespace PhotossimoV9.Object
 
         public static void InitializeDictionary()
         {
-            // 1) On vide ce qui pourrait rester d’un appel précédent
+            // 1) On vide ce qui pourrait rester d’un appel précédent.
             _tagDictionary.Clear();
 
             // 2) On crée le root
