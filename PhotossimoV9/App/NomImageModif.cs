@@ -17,7 +17,8 @@ namespace PhotossimoV9.App
         {
             InitializeComponent();
             textBoxAncienNom.ReadOnly = true;
-            textBoxAncienNom.Text = anciennom;
+            string nomSansExtension = System.IO.Path.GetFileNameWithoutExtension(anciennom);
+            textBoxAncienNom.Text = nomSansExtension;
         }
 
         private void buttonValider_Click(object sender, EventArgs e)

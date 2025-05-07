@@ -16,6 +16,19 @@ namespace Photossimo
         {
             InitializeComponent();
         }
+        private void ListViewImage_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (listViewImage.SelectedItems.Count != 1) return;
+            if (listViewImage.SelectedItems[0].Tag is Img img)
+            {
+                using var dlg = new ImageDetailView(img, this);
+                dlg.ShowDialog();
+            }
+        }
+        public void RefreshListView()
+        {
+            AfficherImages(listImg);
+        }
 
         public void AddImage(Img newImage)
         {

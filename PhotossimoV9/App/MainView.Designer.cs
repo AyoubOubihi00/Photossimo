@@ -81,14 +81,10 @@
             tableLayoutPanel2.Location = new Point(163, 3);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 4;
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 14.8648653F));
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 20.72072F));
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 9F));
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 55F));
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel2.RowStyles.Add(new RowStyle());
+            tableLayoutPanel2.RowStyles.Add(new RowStyle());
+            tableLayoutPanel2.RowStyles.Add(new RowStyle());
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel2.Size = new Size(634, 444);
             tableLayoutPanel2.TabIndex = 1;
             // 
@@ -191,11 +187,12 @@
             // 
             tableLayoutPanel2.SetColumnSpan(listViewImage, 3);
             listViewImage.Dock = DockStyle.Fill;
-            listViewImage.Location = new Point(3, 201);
+            listViewImage.Location = new Point(3, 181);
             listViewImage.Name = "listViewImage";
-            listViewImage.Size = new Size(628, 240);
+            listViewImage.Size = new Size(628, 260);
             listViewImage.TabIndex = 9;
             listViewImage.UseCompatibleStateImageBehavior = false;
+            listViewImage.MouseDoubleClick += ListViewImage_MouseDoubleClick;
             // 
             // tableLayoutPanel4
             // 

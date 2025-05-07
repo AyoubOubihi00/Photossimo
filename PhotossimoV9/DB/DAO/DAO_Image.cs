@@ -117,7 +117,7 @@ namespace PhotossimoV9.DB.DAO
             {
                 MySqlCommand command = DataBase.GetInstance().CreateCommand();
                 command.Transaction = transaction;
-                command.CommandText = "UPDATE images SET chemin_image=@chemin_image, date_import=@date_import, tags=@tags WHERE id_image=@id_image";
+                command.CommandText = "UPDATE images SET nom_image=@nom_image, date_import=@date_import, tags=@tags WHERE id_image=@id_image";
                 command.Parameters.AddWithValue("@nom_image", img.NomImage);
                 command.Parameters.AddWithValue("@date_import", img.DateImport);
                 command.Parameters.AddWithValue("@tags", Utils.Utils.ParseListToString(img.ListTagToListInt()));
