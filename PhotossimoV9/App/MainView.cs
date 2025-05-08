@@ -306,7 +306,7 @@ namespace Photossimo
             }
 
             // Ouvre la fenêtre de modification des tags et on lui passe les images sélectionnées
-            ModificationImage_Tag modifImgTag = new ModificationImage_Tag(imagesSelectionnes);
+            ModificationImage_Tag modifImgTag = new ModificationImage_Tag(imagesSelectionnes,this);
             modifImgTag.ShowDialog();
         }
 

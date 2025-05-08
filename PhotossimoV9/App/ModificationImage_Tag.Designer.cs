@@ -36,6 +36,8 @@
             button1 = new Button();
             button2 = new Button();
             listBoxTag = new ListBox();
+            treeViewTagImage = new TreeView();
+            label4 = new Label();
             flowLayoutPanel1.SuspendLayout();
             SuspendLayout();
             // 
@@ -65,14 +67,14 @@
             flowLayoutPanel1.Controls.Add(listViewImages);
             flowLayoutPanel1.Location = new Point(28, 108);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(725, 155);
+            flowLayoutPanel1.Size = new Size(492, 155);
             flowLayoutPanel1.TabIndex = 3;
             // 
             // listViewImages
             // 
             listViewImages.Location = new Point(3, 3);
             listViewImages.Name = "listViewImages";
-            listViewImages.Size = new Size(722, 152);
+            listViewImages.Size = new Size(489, 152);
             listViewImages.TabIndex = 0;
             listViewImages.UseCompatibleStateImageBehavior = false;
             // 
@@ -104,6 +106,7 @@
             button2.TabIndex = 7;
             button2.Text = "Enregister et Valider";
             button2.UseVisualStyleBackColor = true;
+            button2.Click += Valider;
             // 
             // listBoxTag
             // 
@@ -113,11 +116,30 @@
             listBoxTag.Size = new Size(150, 144);
             listBoxTag.TabIndex = 8;
             // 
+            // treeViewTagImage
+            // 
+            treeViewTagImage.CheckBoxes = true;
+            treeViewTagImage.Location = new Point(539, 94);
+            treeViewTagImage.Name = "treeViewTagImage";
+            treeViewTagImage.Size = new Size(249, 309);
+            treeViewTagImage.TabIndex = 9;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(539, 71);
+            label4.Name = "label4";
+            label4.Size = new Size(207, 20);
+            label4.TabIndex = 10;
+            label4.Text = "Choisissez les Tags à associer :\r\n";
+            // 
             // ModificationImage_Tag
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(label4);
+            Controls.Add(treeViewTagImage);
             Controls.Add(listBoxTag);
             Controls.Add(button2);
             Controls.Add(button1);
@@ -142,5 +164,7 @@
         private Button button1;
         private Button button2;
         private ListBox listBoxTag;
+        private TreeView treeViewTagImage;
+        private Label label4;
     }
 }
