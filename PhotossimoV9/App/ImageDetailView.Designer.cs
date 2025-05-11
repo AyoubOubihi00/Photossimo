@@ -46,7 +46,12 @@ namespace PhotossimoV9.App
 
             // panelImage & pictureBoxFull
             panelImage = new Panel { AutoScroll = true, Dock = DockStyle.Fill };
-            pictureBoxFull = new PictureBox { SizeMode = PictureBoxSizeMode.Normal };
+            pictureBoxFull = new PictureBox
+            {
+                Dock = DockStyle.Fill,   // remplit tout le panel
+                SizeMode = PictureBoxSizeMode.Zoom, // s’adapte pour montrer l'image entière
+            };
+
             panelImage.Controls.Add(pictureBoxFull);
 
             // bottomLeftFlow

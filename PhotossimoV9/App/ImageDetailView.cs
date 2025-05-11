@@ -29,11 +29,8 @@ namespace PhotossimoV9.App
                 var temp = Image.FromStream(fs);
                 pictureBoxFull.Image = new Bitmap(temp);
                 temp.Dispose();
-            }
-            // restaure l'affichage à taille réelle
-            pictureBoxFull.Size = pictureBoxFull.Image.Size;
-            pictureBoxFull.SizeMode = PictureBoxSizeMode.Normal;
-            panelImage.AutoScrollMinSize = pictureBoxFull.Image.Size;
+                }
+            // Le PictureBox est déjà en Dock=Fill & SizeMode=Zoom, il ajuste tout seul.
 
             labelName.Text = _img.NomImage;
 
@@ -46,21 +43,11 @@ namespace PhotossimoV9.App
         }
 
         private void ImageDetailView_Shown(object sender, EventArgs e)
-        {
+        {/*
             // ajuste la fenêtre pour afficher l'image en taille réelle
-            int controlsHeight = bottomLeftFlow.Height;
-            int deltaHeight = this.Height - this.ClientSize.Height;
-            int deltaWidth = this.Width - this.ClientSize.Width;
-
-            int desiredClientWidth = pictureBoxFull.Image.Width;
-            int desiredClientHeight = pictureBoxFull.Image.Height + controlsHeight;
-
-            var screenArea = Screen.FromControl(this).WorkingArea;
-            desiredClientWidth = Math.Min(desiredClientWidth, screenArea.Width);
-            desiredClientHeight = Math.Min(desiredClientHeight, screenArea.Height);
-
-            this.Size = new Size(desiredClientWidth + deltaWidth, desiredClientHeight + deltaHeight);
-            panelImage.AutoScrollMinSize = pictureBoxFull.Image.Size;
+            pictureBoxFull.SizeMode = PictureBoxSizeMode.Normal;
+            pictureBoxFull.Size = pictureBoxFull.Image.Size;
+            panelImage.AutoScrollMinSize = pictureBoxFull.Image.Size;*/
         }
 
         // Charge l'arbre sans afficher le tag root (id = 0) et coche seulement les feuilles associées
@@ -176,14 +163,43 @@ namespace PhotossimoV9.App
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Supprimer cette image définitivement ?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
+            if (MessageBox.Show("Supprimer cette image définitivement ?", "Confirmation",
+                                MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
+                != DialogResult.Yes)
                 return;
+
+            // 1) Dispose tous les bitmaps qui pointent sur ce fichier
+            pictureBoxFull.Image?.Dispose();
+            pictureBoxFull.Image = null!;
+            _img.Image?.Dispose();
+            _img.Image = null!;
+
+            // 2) Collecte immédiate des finaliseurs pour libérer tout handle restant
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            // 3) Supprime de la BDD
             using var tx = DataBase.GetInstance().BeginTransaction();
             _dao.Delete(_img, tx);
             tx.Commit();
-            File.Delete(_img.GetCheminImage());
+
+            // 4) Supprime physiquement le fichier
+            try
+            {
+                File.Delete(_img.GetCheminImage());
+            }
+            catch (IOException ex)
+            {
+                MessageBox.Show($"Impossible de supprimer le fichier :\n{ex.Message}", "Erreur",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // 5) Mets à jour la vue principale et ferme
             _parent.RemoveImage(_img, _parent.listImg.IndexOf(_img));
             Close();
         }
+
+
     }
 }
