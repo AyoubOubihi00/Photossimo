@@ -78,7 +78,11 @@ namespace PhotossimoV9.App
 
                     foreach (TagImg tag in selectedImage.Tags)
                     {
-                        listBoxTag.Items.Add(tag.NomTag);
+                        if(tag.Enfants.Count == 0)
+                        {
+                            listBoxTag.Items.Add(tag.NomTag);
+                        }
+                        
                     }
 
                     LoadTagTreeView(selectedImage);

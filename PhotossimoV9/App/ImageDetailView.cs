@@ -63,27 +63,74 @@ namespace PhotossimoV9.App
             panelImage.AutoScrollMinSize = pictureBoxFull.Image.Size;
         }
 
+        // Charge l'arbre sans afficher le tag root (id = 0) et coche seulement les feuilles associées
         private void LoadTagTree()
         {
             treeViewTags.Nodes.Clear();
-            var rootTag = TagImg.GetTagDictionary()[0];
-            var rootNode = new TreeNode(rootTag.NomTag) { Tag = rootTag };
-            BuildTree(rootTag, rootNode);
-            treeViewTags.Nodes.Add(rootNode);
-            rootNode.Expand();
 
-            // coche uniquement les feuilles associées
-            var leafIds = _img.Tags.Where(t => t.IdTag != 0).Select(t => t.IdTag).ToHashSet();
-            foreach (var leaf in GetLeaves(rootNode))
+            // Récupère le tag racine (id = 0)
+            var rootTag = TagImg.GetTagDictionary()[0];
+
+            // Ajoute chacun de ses enfants comme nœud racine
+            foreach (var child in rootTag.Enfants)
             {
-                if (leaf.Tag is TagImg tg && leafIds.Contains(tg.IdTag))
+                var childNode = new TreeNode(child.NomTag) { Tag = child };
+                BuildTree(child, childNode);
+                treeViewTags.Nodes.Add(childNode);
+                childNode.Expand();
+            }
+
+            // Prépare set des feuilles à cocher
+            var leafIds = _img.Tags.Where(t => t.IdTag != 0)
+                                   .Select(t => t.IdTag)
+                                   .ToHashSet();
+
+            // Coche uniquement les feuilles correspondantes
+            foreach (TreeNode top in treeViewTags.Nodes)
+            {
+                foreach (var leaf in GetLeaves(top))
                 {
-                    var p = leaf.Parent;
-                    while (p != null) { p.Expand(); p = p.Parent; }
-                    leaf.Checked = true;
+                    if (leaf.Tag is TagImg tg && leafIds.Contains(tg.IdTag))
+                    {
+                        // Déplie jusqu'en haut
+                        var p = leaf.Parent;
+                        while (p != null)
+                        {
+                            p.Expand();
+                            p = p.Parent;
+                        }
+                        leaf.Checked = true;
+                    }
                 }
             }
         }
+
+        // Valide les tags cochés (ne plus se limiter à treeViewTags.Nodes[0])
+        private void btnValidateTags_Click(object sender, EventArgs e)
+        {
+            _img.Tags.Clear();
+
+            // Pour chaque arbre de premier niveau
+            foreach (TreeNode top in treeViewTags.Nodes)
+            {
+                // Pour chaque feuille de cet arbre
+                foreach (var leaf in GetLeaves(top))
+                {
+                    if (leaf.Checked && leaf.Tag is TagImg tg)
+                    {
+                        _img.Tags.Add(tg);
+                    }
+                }
+            }
+
+            using var tx = DataBase.GetInstance().BeginTransaction();
+            _dao.Update(_img, tx);
+            tx.Commit();
+
+            _parent.RefreshListView();
+            MessageBox.Show("Tags mis à jour.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
 
         private void BuildTree(TagImg parent, TreeNode node)
         {
@@ -109,21 +156,6 @@ namespace PhotossimoV9.App
             foreach (TreeNode c in e.Node.Nodes)
                 c.Checked = e.Node.Checked;
             treeViewTags.AfterCheck += treeViewTags_AfterCheck;
-        }
-
-        private void btnValidateTags_Click(object sender, EventArgs e)
-        {
-            _img.Tags.Clear();
-            foreach (var leaf in GetLeaves(treeViewTags.Nodes[0]))
-                if (leaf.Checked && leaf.Tag is TagImg tg)
-                    _img.Tags.Add(tg);
-
-            using var tx = DataBase.GetInstance().BeginTransaction();
-            _dao.Update(_img, tx);
-            tx.Commit();
-
-            _parent.RefreshListView();
-            MessageBox.Show("Tags mis à jour.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void btnRename_Click(object sender, EventArgs e)

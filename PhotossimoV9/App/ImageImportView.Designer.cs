@@ -49,6 +49,7 @@
             // buttonBrowse
             // 
             buttonBrowse.Dock = DockStyle.Fill;
+            buttonBrowse.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             buttonBrowse.Location = new Point(803, 103);
             buttonBrowse.Name = "buttonBrowse";
             buttonBrowse.Size = new Size(216, 34);
@@ -59,6 +60,7 @@
             // buttonCancel
             // 
             buttonCancel.Dock = DockStyle.Fill;
+            buttonCancel.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             buttonCancel.Location = new Point(3, 856);
             buttonCancel.Name = "buttonCancel";
             buttonCancel.Size = new Size(794, 54);
@@ -68,17 +70,24 @@
             // 
             // buttonValiderImport
             // 
+            buttonValiderImport.BackColor = Color.FromArgb(192, 255, 192);
             buttonValiderImport.Dock = DockStyle.Fill;
+            buttonValiderImport.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             buttonValiderImport.Location = new Point(803, 856);
             buttonValiderImport.Name = "buttonValiderImport";
             buttonValiderImport.Size = new Size(216, 54);
             buttonValiderImport.TabIndex = 6;
             buttonValiderImport.Text = "Valider Import";
+            buttonValiderImport.UseVisualStyleBackColor = false;
             buttonValiderImport.Click += buttonValiderImport_Click;
             // 
             // buttonAjouterTag
             // 
-            buttonAjouterTag.Dock = DockStyle.Top;
+            buttonAjouterTag.BackColor = Color.FromArgb(192, 255, 192);
+            buttonAjouterTag.Dock = DockStyle.Fill;
+            buttonAjouterTag.FlatAppearance.BorderColor = Color.Black;
+            buttonAjouterTag.FlatStyle = FlatStyle.Flat;
+            buttonAjouterTag.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             buttonAjouterTag.Location = new Point(3, 40);
             buttonAjouterTag.Margin = new Padding(3, 10, 3, 20);
             buttonAjouterTag.MaximumSize = new Size(194, 30);
@@ -87,19 +96,26 @@
             buttonAjouterTag.Size = new Size(194, 30);
             buttonAjouterTag.TabIndex = 1;
             buttonAjouterTag.Text = "Ajouter Tag";
+            buttonAjouterTag.UseCompatibleTextRendering = true;
+            buttonAjouterTag.UseVisualStyleBackColor = false;
             buttonAjouterTag.Click += buttonAjouterTag_Click;
             // 
             // buttonSupprimerTag
             // 
+            buttonSupprimerTag.BackColor = Color.FromArgb(255, 128, 128);
             buttonSupprimerTag.Dock = DockStyle.Top;
+            buttonSupprimerTag.FlatAppearance.BorderColor = Color.Black;
+            buttonSupprimerTag.FlatStyle = FlatStyle.Flat;
+            buttonSupprimerTag.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             buttonSupprimerTag.Location = new Point(3, 73);
-            buttonSupprimerTag.Margin = new Padding(3, 10, 3, 20);
+            buttonSupprimerTag.Margin = new Padding(3, 10, 3, 30);
             buttonSupprimerTag.MaximumSize = new Size(194, 30);
             buttonSupprimerTag.MinimumSize = new Size(194, 30);
             buttonSupprimerTag.Name = "buttonSupprimerTag";
             buttonSupprimerTag.Size = new Size(194, 30);
             buttonSupprimerTag.TabIndex = 2;
             buttonSupprimerTag.Text = "Supprimer Tag";
+            buttonSupprimerTag.UseVisualStyleBackColor = false;
             buttonSupprimerTag.Click += buttonSupprimerTag_Click;
             // 
             // comboBoxTag
@@ -199,11 +215,12 @@
             // 
             // button1
             // 
+            button1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             button1.Location = new Point(3, 103);
             button1.Name = "button1";
             button1.Size = new Size(215, 29);
             button1.TabIndex = 7;
-            button1.Text = "Modification Nom Image";
+            button1.Text = "Renommer l'image";
             button1.UseVisualStyleBackColor = true;
             button1.Click += ModifNom_click;
             // 

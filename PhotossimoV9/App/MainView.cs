@@ -17,6 +17,8 @@ namespace Photossimo
         {
             InitializeComponent();
             ConfigureTagSearch();
+            // reposition & resize suggestions whenever la fenêtre change de taille
+            this.Resize += (s, e) => UpdateSuggestionBoxLayout();
         }
 
         private AutoCompleteStringCollection _tagSource;
@@ -24,6 +26,17 @@ namespace Photossimo
         private void ConfigureTagSearch()
         {
             textBox1.TextChanged += TextBox1_TextChanged;
+        }
+
+        private void UpdateSuggestionBoxLayout()
+        {
+            // même largeur que textBox1
+            listBoxSuggestions.Width = textBox1.Width;
+            // placer juste sous textBox1
+            var screenPt = textBox1.PointToScreen(Point.Empty);
+            var clientPt = this.PointToClient(screenPt);
+            listBoxSuggestions.Location = new Point(clientPt.X, clientPt.Y + textBox1.Height);
+            listBoxSuggestions.BringToFront();
         }
 
         private void TextBox1_TextChanged(object sender, EventArgs e)
@@ -178,11 +191,23 @@ namespace Photossimo
         {
             tagTreeView.Nodes.Clear();
 
-            if (!TagImg.GetTagDictionary().TryGetValue(0, out TagImg? racine)) throw new ArgumentNullException("Racine introuvable");
-            TreeNode racineNode = new(racine.NomTag) { Tag = racine };
-            AddChildrenTagTreeView(racine, racineNode);
-            tagTreeView.Nodes.Add(racineNode);
+            // Récupère le tag racine (id = 0)
+            if (!TagImg.GetTagDictionary().TryGetValue(0, out TagImg? racine))
+                throw new ArgumentNullException("Racine introuvable");
+
+            // Au lieu d'ajouter le node racine, on ajoute directement ses enfants
+            foreach (TagImg enfant in racine.Enfants)
+            {
+                var enfantNode = new TreeNode(enfant.NomTag) { Tag = enfant };
+                AddChildrenTagTreeView(enfant, enfantNode);
+                tagTreeView.Nodes.Add(enfantNode);
+            }
+
+            /*// Optionnel : déplier tout par défaut
+            foreach (TreeNode node in tagTreeView.Nodes)
+                node.Expand();*/
         }
+
 
         private void AddChildrenTagTreeView(TagImg parent, TreeNode parentNode)
         {
@@ -330,7 +355,7 @@ namespace Photossimo
         private void AfficheLabelTags()
         {
             List<TagImg> FeuillesCoches = recuperationTagsFeuilles(tagTreeView.Nodes);
-            labelTags.Text = "Tags le plus spécifiques : " + string.Join(", ", FeuillesCoches.Select(t => t.NomTag));
+            labelTags.Text = "Tag(s) le(s) plus spécifique(s) : " + string.Join(", ", FeuillesCoches.Select(t => t.NomTag));
         
             if (FeuillesCoches.Count == 0)
             {

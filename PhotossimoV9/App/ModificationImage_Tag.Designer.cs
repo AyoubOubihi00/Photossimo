@@ -49,7 +49,7 @@
             label1.Name = "label1";
             label1.Size = new Size(409, 54);
             label1.TabIndex = 0;
-            label1.Text = "Modification des Tags";
+            label1.Text = "Modification des tags";
             label1.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // label2
@@ -131,7 +131,7 @@
             label4.Name = "label4";
             label4.Size = new Size(207, 20);
             label4.TabIndex = 10;
-            label4.Text = "Choisissez les Tags à associer :\r\n";
+            label4.Text = "Choisissez les tags à associer :\r\n";
             // 
             // ModificationImage_Tag
             // 
@@ -147,8 +147,8 @@
             Controls.Add(flowLayoutPanel1);
             Controls.Add(label2);
             Controls.Add(label1);
-            Name = "ModificationImage_Tag";
-            Text = "ModificationImage_Tag";
+            Name = "Modification des tags de l'image";
+            Text = "Modification des tags de l'image";
             flowLayoutPanel1.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();

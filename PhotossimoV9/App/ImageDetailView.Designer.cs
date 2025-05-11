@@ -61,7 +61,7 @@ namespace PhotossimoV9.App
 
             // rightPanel
             rightPanel = new Panel { Dock = DockStyle.Fill, Padding = new Padding(5) };
-            btnValidateTags = new Button { AutoSize = true, Dock = DockStyle.Top, Text = "Valider Tags", Margin = new Padding(0, 5, 0, 5) };
+            btnValidateTags = new Button { AutoSize = true, Dock = DockStyle.Top, Text = "Valider Tags", Margin = new Padding(0, 5, 0, 15), BackColor = Color.FromArgb(192, 255, 192) };
             treeViewTags = new TreeView { Dock = DockStyle.Fill, CheckBoxes = true };
 
             rightPanel.Controls.Add(treeViewTags);

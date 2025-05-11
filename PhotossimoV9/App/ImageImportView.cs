@@ -13,6 +13,7 @@ using PhotossimoV9.App;
 using PhotossimoV9.DB;
 using PhotossimoV9.DB.DAO;
 using PhotossimoV9.Object;
+using PhotossimoV9.Utils;
 
 namespace Photossimo
 {
@@ -25,15 +26,60 @@ namespace Photossimo
         private void ChargerTags()
         {
             comboBoxTag.Items.Clear();
+            comboBoxTag.DropDownStyle = ComboBoxStyle.DropDown;
 
-            if (TagImg.GetTagDictionary().TryGetValue(0, out var rootTag))
-                comboBoxTag.Items.Add(rootTag.NomTag);
+            // Récupère tous les noms de tag (hors racine)
+            var tags = TagImg.GetTagDictionary()
+                             .Values
+                             .Where(t => t.IdTag != 0)
+                             .OrderBy(t => t.NomTag)
+                             .Select(t => t.NomTag)
+                             .ToArray();
 
-            foreach (var tag in TagImg.GetTagDictionary().Values.Where(tag => tag.IdTag != 0).OrderBy(t => t.NomTag))
-                comboBoxTag.Items.Add(tag.NomTag);
+            comboBoxTag.Items.AddRange(tags);
+
+            // Configure l'auto-complétion
+            comboBoxTag.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            comboBoxTag.AutoCompleteSource = AutoCompleteSource.CustomSource;
+            comboBoxTag.AutoCompleteCustomSource = new AutoCompleteStringCollection();
+            comboBoxTag.AutoCompleteCustomSource.AddRange(tags);
+
+            comboBoxTag.TextChanged -= ComboBoxTag_TextChanged;
+            comboBoxTag.TextChanged += ComboBoxTag_TextChanged;
         }
 
-        // Appelle cette méthode dans ton constructeur après InitializeComponent()
+        private void ComboBoxTag_TextChanged(object sender, EventArgs e)
+        {
+            string input = comboBoxTag.Text;
+            if (string.IsNullOrEmpty(input)) return;
+
+            // Normalise l'entrée
+            string normInput = Utils.RemoveDiacritics(input).ToLowerInvariant();
+
+            // Filtre en ignorant les diacritiques
+            var matches = comboBoxTag.AutoCompleteCustomSource
+                .Cast<string>()
+                .Where(tag =>
+                {
+                    string normTag = Utils.RemoveDiacritics(tag).ToLowerInvariant();
+                    return normTag.StartsWith(normInput);
+                })
+                .OrderBy(tag => tag)
+                .ToArray();
+
+            if (matches.Any())
+            {
+                // On remplit à nouveau la liste déroulante
+                comboBoxTag.Items.Clear();
+                comboBoxTag.Items.AddRange(matches);
+
+                comboBoxTag.DroppedDown = true;
+                comboBoxTag.SelectionStart = input.Length;
+                comboBoxTag.SelectionLength = 0;
+            }
+        }
+
+
         public ImageImportView(MainView mv)
         {
             mainView = mv;
